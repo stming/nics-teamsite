@@ -1,0 +1,301 @@
+<project name="Nikon - NHK" default="simple-build" basedir=".">
+
+	<property file="${basedir}/props/${env}.properties" />
+	<property file="${basedir}/props/ROOT.properties" />
+
+	<property name="source" value="${basedir}/classes/src" />
+	<property name="build" value="${basedir}/build" />
+	<property name="tokens" value="${basedir}/props/${env}.properties" />
+	<property name="deploy.root" value="${basedir}/deploy/${env}" />
+
+	<taskdef resource="net/sf/antcontrib/antlib.xml">
+		<classpath>
+			<fileset dir="${basedir}/ant" includes="ant-contrib-*.jar"/>
+		</classpath>
+	</taskdef>
+
+	<path id="libs">
+		<fileset dir="${basedir}/lib">
+			<include name="*.jar" />
+		</fileset>
+		<fileset dir="${basedir}/lib/livesite">
+			<include name="*.jar" />
+		</fileset>	
+	</path>
+
+
+	<taskdef name="dbunit" classname="org.dbunit.ant.DbUnitTask" classpathref="libs">
+		<classpath>
+			<fileset dir="${basedir}/lib" includes="*.jar"/>
+		</classpath>
+	</taskdef>
+
+
+	<taskdef name="hibernatetool" classname="org.hibernate.tool.ant.HibernateToolTask">
+		<classpath>
+			<fileset dir="${basedir}/lib" includes="*.jar"/>
+		</classpath>
+	</taskdef>
+
+	<target name="help">
+		<echo>Command               Description</echo>
+		<echo>=======               ===========</echo>
+		<echo>help                  Shows this printout</echo>
+		<echo>build                 Builds the project</echo>
+		<echo>junit                 Builds the Junit test classes and executes them</echo>
+		<echo>all                   Does a build an junit</echo>
+		<echo>copy2server           Copies a build to shared drive. Quick fix for VM deployment</echo>
+	</target>
+
+	<target name="build">
+
+		<fail unless="env">You must specify the environment property when you run ant.</fail>
+		<available property="env.prop.file.exists" file="props/${env}.properties"/>
+		<fail unless="env.prop.file.exists">Cannot find ${env}.properties file.</fail>
+
+		<!-- Compile the common classes -->
+
+		<echo>+--------------------------------------------------------</echo>
+		<echo>| Compiling java classes                                 </echo>
+		<echo>+--------------------------------------------------------</echo>
+		<echo>| includes:${javac.includes}                             </echo>
+		<echo>| excludes:${javac.excludes}                             </echo>
+		<echo>+--------------------------------------------------------</echo>
+
+		<delete dir="${build}"/>
+		<delete dir="${deploy.root}"/>
+
+		<mkdir dir="${build}/java"/>
+		<mkdir dir="${build}/dbunit"/>
+		<mkdir dir="${deploy.root}"/>
+
+
+		<copy todir="${build}/java">
+			<fileset dir="${source}/java" includes="*/**/*.hbm.xml, */**/*.cfg.xml"/>
+		</copy>
+
+		<!-- Do some token replacements -->
+		<echo>Making token substitutions</echo>
+
+		<replace replacefilterfile="${tokens}" dir="${build}/java/com/interwoven/teamsite/nikon/hibernate" includes="HBN8.*.cfg.xml" />
+
+
+		<javac srcdir="${source}/java" destdir="${build}/java" classpathref="libs" debug="on" includes="${javac.includes}" excludes="${javac.excludes}"/>
+
+		<!-- Make the class jar -->
+		<jar basedir="${build}/java" destfile="${deploy.root}/${jar.destfile}" excludes="*/**/*.hbm.xml, */**/*.cfg.xml" />
+
+
+		<!-- Make the hibernate config files -->
+		<zip basedir="${build}/java" destfile="${deploy.root}/${hibernate.config.file}" includes="*/**/*.hbm.xml" excludes="*/**/*.class, */**/*.cfg.xml" />
+
+
+		<!-- Copy HBN8 config files to deployment directory -->
+		<echo>Copying HBN8 Config to root</echo>
+		<copy todir="${deploy.root}" flatten="true">
+			<fileset dir="${build}/java" includes="*/**/HBN8.*.cfg.xml"/>
+		</copy>
+		<!-- NB20090914 End -->
+
+	</target>
+
+	<target name="simple-build">
+		<echo>+--------------------------------------------------------</echo>
+		<echo>| Compiling java classes                                 </echo>
+		<echo>+--------------------------------------------------------</echo>
+		<echo>| includes:${javac.includes}                             </echo>
+		<echo>| excludes:${javac.excludes}                             </echo>
+		<echo>+--------------------------------------------------------</echo>
+
+		<delete dir="${build}"/>
+		<delete dir="${basedir}/deploy"/>
+
+		<mkdir dir="${build}/java"/>
+		<mkdir dir="${build}/deploy/ACCEPTANCE"/>
+		<mkdir dir="${build}/deploy/DEVELOPMENT"/>
+		<mkdir dir="${build}/deploy/PRODUCTION"/>
+		<mkdir dir="${build}/deploy/props"/>
+
+		<copy todir="${build}/java">
+			<fileset dir="${source}/java" includes="*/**/*.hbm.xml, */**/*.cfg.xml, */**/*.properties"/>
+		</copy>
+
+		<javac srcdir="${source}/java" destdir="${build}/java" classpathref="libs" debug="on" includes="${javac.includes}" excludes="${javac.excludes}" target="1.5">
+			<!--compilerarg value="-Xlint:deprecation"/-->
+		</javac>
+
+		<jar basedir="${build}/java" destfile="${build}/deploy/${jar.destfile}" excludes="*/**/*.hbm.xml, */**/*.cfg.xml, com/interwoven/livesite/model/**/*.class" />
+
+		<zip basedir="${build}/java" destfile="${build}/deploy/${hibernate.config.file}" includes="*/**/*.hbm.xml" excludes="*/**/*.class, */**/*.cfg.xml" />
+
+		<copy todir="${build}/deploy/ACCEPTANCE" flatten="true">
+			<fileset dir="${build}/java" includes="*/**/HBN8.*.cfg.xml"/>
+		</copy>
+		
+		<replace replacefilterfile="${basedir}/props/ACCEPTANCE.properties" dir="${build}/deploy/ACCEPTANCE" includes="HBN8.*.cfg.xml" />
+
+
+		<copy todir="${build}/deploy/DEVELOPMENT" flatten="true">
+			<fileset dir="${build}/java" includes="*/**/HBN8.*.cfg.xml"/>
+		</copy>
+
+		<replace replacefilterfile="${basedir}/props/DEVELOPMENT.properties" dir="${build}/deploy/DEVELOPMENT" includes="HBN8.*.cfg.xml" />
+
+		
+		<copy todir="${build}/deploy/PRODUCTION" flatten="true">
+			<fileset dir="${build}/java" includes="*/**/HBN8.*.cfg.xml"/>
+		</copy>
+
+		<replace replacefilterfile="${basedir}/props/PRODUCTION.properties" dir="${build}/deploy/PRODUCTION" includes="HBN8.*.cfg.xml" />
+
+		<copy todir="${build}/deploy/props">
+			<fileset dir="props" includes="solr.properties"/>
+		</copy>
+		
+	</target>
+
+	<target name="junit" depends="build">
+
+		<delete dir="${build}/junit" />
+		<mkdir dir="${build}/junit" />
+
+		<echo>+--------------------------------------------------------</echo>
+		<echo>| Compiling junit classes </echo>
+		<echo>+--------------------------------------------------------</echo>
+		<echo>| includes:${junit.compile.includes}</echo>
+		<echo>| excludes:${junit.compile.excludes}</echo>
+		<echo>+--------------------------------------------------------</echo>
+
+		<javac srcdir="${source}/junit" destdir="${build}/junit" includes="${junit.compile.includes}" excludes="${junit.compile.excludes}" debug="on">
+			<classpath>
+				<!--<pathelement location="${build}/java"/>-->
+				<fileset dir="${basedir}/lib" includes="*.jar" />
+				<fileset file="${jar.destfile}" />
+				<fileset file="${hibernate.config.file}" />
+
+			</classpath>
+		</javac>
+
+		<mkdir dir="${build}/junit/config"/>
+		<copy todir="${build}/junit/config">
+			<fileset dir="${basedir}/config/junit" includes="**/*"/>
+		</copy>
+
+
+		<!-- Make any directories we may need before we call them -->
+		<mkdir dir="${junit.run.log.dir}"/>
+
+		<echo>+--------------------------------------------------------</echo>
+		<echo>| Execuiting Junit Tests</echo>
+		<echo>+--------------------------------------------------------</echo>
+		<echo>| includes:${junit.run.includes}</echo>
+		<echo>| excludes:${junit.run.excludes}</echo>
+		<echo>+--------------------------------------------------------</echo>
+
+		<!-- If we're outputting to a directory/files then let's clear it out first -->
+		<if>
+			<equals arg1="${junit.run.usefile}" arg2="true"/>
+			<then>
+				<delete dir="${junit.run.log.dir}" />
+				<mkdir dir="${junit.run.log.dir}"/>
+			</then>
+		</if>
+
+		<junit showoutput="${junit.run.showoutput}"
+               printsummary="${junit.run.printsummary}"
+               haltonfailure="${junit.run.haltonfailure}"
+               fork="${junit.run.fork}">
+
+			<!-- add all the libraries we need to do this -->
+			<classpath>
+				<fileset dir="${basedir}/lib" includes="antlr-2.7.2.jar" />
+				<pathelement location="${build}/java"/>
+				<pathelement location="${build}/junit"/>
+				<pathelement location="${build}/junit/config"/>
+				<fileset dir="${basedir}/lib" includes="*.jar" excludes="antlr-2.7.2.jar" />
+			</classpath>
+
+			<formatter type="${junit.run.formatter}" usefile="${junit.run.usefile}"/>
+
+			<!-- User batchtest to call tests in a recursive way -->
+			<batchtest todir="${junit.run.log.dir}">
+				<fileset dir="${build}/junit" includes="${junit.run.includes}" excludes="${junit.run.excludes}"/>
+			</batchtest>
+		</junit>
+	</target>
+
+	<target name="all" depends="build, junit"/>
+
+
+
+	<target name="export-db-schema" depends="build">
+		<echo>+--------------------------------------------------------</echo>
+		<echo>| Exporting db schema</echo>
+		<echo>+--------------------------------------------------------</echo>
+		<echo>| destDir   :${hbn8.export.destDir}</echo>
+		<echo>| fileName  :${hbn8.export.fileName}</echo>
+		<echo>| configFile:${hbn8.export.configFile}</echo>
+		<echo>+--------------------------------------------------------</echo>
+
+		<hibernatetool destdir="${hbn8.export.destDir}">
+
+			<classpath>
+				<pathelement location="${build}/java"/>
+			</classpath>
+
+			<configuration configurationfile="${hbn8.export.configFile}" />
+
+			<hbm2ddl drop="true" create="true" export="true" outputfilename="${hbn8.export.fileName}"/>
+		</hibernatetool>
+	</target>
+
+	<target name="deploy-db-testdata">
+		<echo>+--------------------------------------------------------</echo>
+		<echo>| Deploying Test Data</echo>
+		<echo>+--------------------------------------------------------</echo>
+		<echo>| ${build}/dbunit/Nikon-BV-DBSchema.xml</echo>
+		<echo>| ${dbunit.testdata.srcFile}</echo>
+		<echo>+--------------------------------------------------------</echo>
+
+		<dbunit driver="${dbunit.driver}"          
+            url="${dbunit.url}"          
+            userid="${dbunit.userid}"          
+            password="${dbunit.password}">
+			<classpath>
+				<pathelement location="${dbunit.jdbcDriver}"/>
+			</classpath>
+			<operation type="MSSQL_CLEAN_INSERT" src="${build}/${dbunit.testdata.srcFile}"/>
+		</dbunit>
+	</target>
+
+	<target name="copy2server" depends="build">
+		<echo>+--------------------------------------------------------</echo>
+		<echo>| Copying hibernate and nikon jar files to build image   </echo>
+		<echo>+--------------------------------------------------------</echo>
+
+		<foreach list="${copy2server.hbn8.files}" delimiter="," target="copy2server.hbn8.files.loop" param="copy2server.hbn8.file"/>
+		<foreach list="${copy2server.nikon.jar.files}" delimiter="," target="copy2server.nikon.jar.files.loop" param="copy2server.nikon.jar.file"/>
+
+	</target>
+
+	<!-- Copies hbn8 files to a number of destinations -->
+	<target name="copy2server.hbn8.files.loop">
+		<foreach list="${copy2server.hbn8.dest}" delimiter="," target="copy2server.hbn8.file" param="copy2server.hbn8.dest.dir"/>
+	</target>
+
+	<target name="copy2server.hbn8.file">
+		<echo>Copying ${deploy.root}/${copy2server.hbn8.file} to ${copy2server.hbn8.dest.dir}</echo>
+		<copy file="${deploy.root}/${copy2server.hbn8.file}" todir="${copy2server.hbn8.dest.dir}" overwrite="true"/>
+	</target>
+
+	<!-- Copies nikon jar files to a number of destinations -->
+	<target name="copy2server.nikon.jar.files.loop">
+		<foreach list="${copy2server.nikon.jar.dest}" delimiter="," target="copy2server.nikon.jar.file" param="copy2server.nikon.jar.dest.dir"/>
+	</target>
+
+	<target name="copy2server.nikon.jar.file">
+		<echo>Copying ${deploy.root}/${copy2server.nikon.jar.file} to ${copy2server.nikon.jar.dest.dir}</echo>
+		<copy file="${deploy.root}/${copy2server.nikon.jar.file}" todir="${copy2server.nikon.jar.dest.dir}" overwrite="true"/>
+	</target>
+
+</project>

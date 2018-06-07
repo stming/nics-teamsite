@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+
+    <session-factory>
+        <!-- Database connection settings -->
+        <property name="connection.driver_class">HBN8.TMS.connection.driver_class</property>
+        <property name="connection.url">HBN8.TMS.connection.url</property>
+        <property name="connection.username">HBN8.TMS.connection.username</property>
+        <property name="connection.password">HBN8.TMS.connection.password</property>
+        
+        <!-- Basic Tuning values http://www.hibernate.org/hib_docs/reference/en/html/configuration-optional.html -->
+        <property name="hibernate.jdbc.fetch_size">10</property>
+        <property name="hibernate.default_batch_fetch_size">30</property>
+        <property name="hibernate.connection.autocommit">false</property>
+		<property name="hibernate.connection.release_mode">after_transaction</property>
+        <!-- SQL dialect -->
+        <property name="dialect">org.hibernate.dialect.SQLServerDialect</property>
+
+        <!-- JDBC connection pool (use the built-in) -->
+
+        <!-- Enable Hibernate's automatic session context management -->
+        <property name="current_session_context_class">thread</property>
+
+        <!-- Disable the second-level cache  -->
+        <property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
+
+        <!-- Echo all executed SQL to stdout -->
+        <property name="show_sql">HBN8.TMS.show_sql</property>
+        
+        <!-- Filters -->
+		<mapping resource="com/interwoven/teamsite/nikon/hibernate/hbm/Filters.hbm.xml"/>
+        
+        <!-- Main Class Mappings -->
+		<mapping resource="com/interwoven/teamsite/nikon/hibernate/hbm/Product.hbm.xml"/>
+		<mapping resource="com/interwoven/teamsite/nikon/hibernate/hbm/Product2Accessory.hbm.xml"/>
+		<mapping resource="com/interwoven/teamsite/nikon/hibernate/hbm/Product2Product.hbm.xml"/>
+		<mapping resource="com/interwoven/teamsite/nikon/hibernate/hbm/Product2Award.hbm.xml"/>
+		<mapping resource="com/interwoven/teamsite/nikon/hibernate/hbm/ProductLocaleOptOut.hbm.xml"/>
+		<mapping resource="com/interwoven/teamsite/nikon/hibernate/hbm/Product2Bom.hbm.xml"/>
+		<mapping resource="com/interwoven/teamsite/nikon/hibernate/hbm/Price.hbm.xml"/>
+		
+		<mapping resource="com/interwoven/teamsite/nikon/hibernate/hbm/Award.hbm.xml"/>
+		<mapping resource="com/interwoven/teamsite/nikon/hibernate/hbm/AwardTestimonial.hbm.xml"/>
+		<mapping resource="com/interwoven/teamsite/nikon/hibernate/hbm/AwardTest2Award.hbm.xml"/>
+
+		<mapping resource="com/interwoven/teamsite/nikon/hibernate/hbm/PressLibrary.hbm.xml"/>
+		<mapping resource="com/interwoven/teamsite/nikon/hibernate/hbm/Product2ProductMarketingRelated.hbm.xml"/>
+
+	    <mapping class="com.interwoven.teamsite.nikon.dealerfinder.Dealer"/>
+	    <mapping class="com.interwoven.teamsite.nikon.dealerfinder.AdditionalData"/>
+	    <mapping class="com.interwoven.teamsite.nikon.dealerfinder.Company"/>
+    		
+    </session-factory>
+</hibernate-configuration>

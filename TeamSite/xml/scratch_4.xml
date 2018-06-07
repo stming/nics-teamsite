@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<product_details>
+    <logo_image>Overview.Logo</logo_image>
+    <logo_image_obf />
+    <overview_description>Overview.Description</overview_description>
+    <local_description>Overview Local Description</local_description>
+    <prod_overview_image>asd</prod_overview_image>
+    <prod_overview_image_obf />
+    <add_3d_view>t</add_3d_view>
+    <add_product_tour>t</add_product_tour>
+    <additional_content>asd</additional_content>
+    <key_features>asd</key_features>
+    <overview_footnotes>asd</overview_footnotes>
+    <promotions>
+        <image>asd</image>
+        <image_obf />
+        <image_link>asd</image_link>
+    </promotions>
+    <promotions>
+        <image>asdas</image>
+        <image_obf />
+        <image_link>asd</image_link>
+    </promotions>
+    <promotions>
+        <image>asd</image>
+        <image_obf />
+        <image_link>asd</image_link>
+    </promotions>
+    <specifications>
+        <title>asdf</title>
+        <specification_detail>
+            <name>asdf</name>
+            <description>asdf</description>
+        </specification_detail>
+        <specification_detail>
+            <name>asdf</name>
+            <description>asdffff</description>
+        </specification_detail>
+    </specifications>
+    <specifications>
+        <title>asdf</title>
+        <specification_detail>
+            <name>asdf</name>
+            <description>fsdfsdf</description>
+        </specification_detail>
+        <specification_detail>
+            <name>sdf</name>
+            <description>sdf</description>
+        </specification_detail>
+    </specifications>
+    <specification_footnotes>asdf</specification_footnotes>
+    <product_views_3d_view_data>sdf</product_views_3d_view_data>
+    <product_views_3d_view_data_obf />
+    <product_views_3d_view_loading>sdf</product_views_3d_view_loading>
+    <product_views_3d_view_loading_obf />
+    <features_explained>
+        <features_explained_title>PF TITLE</features_explained_title>
+        <features_explained_visual>PF IMAGE</features_explained_visual>
+        <features_explained_description>PF DESC</features_explained_description>
+    </features_explained>
+    <features_explained>
+        <features_explained_title>PF TIT</features_explained_title>
+        <features_explained_visual>PF IMAGE</features_explained_visual>
+        <features_explained_description>PF DESC</features_explained_description>
+    </features_explained>
+    <home_page_image>asd</home_page_image>
+    <home_page_image_obf />
+    <home_page_description>asdsad</home_page_description>
+    <small_image>asdfsadf</small_image>
+    <small_image_obf />
+    <prod_highlight_box_large_image>asdfsadf</prod_highlight_box_large_image>
+    <prod_highlight_box_large_image_obf />
+    <category_image>asdfasdf</category_image>
+    <category_image_obf />
+    <category_description>asdfasdf</category_description>
+    <products_specs_link>asdfasdf</products_specs_link>
+    <product_tour billboard="asdf">
+        <billboard_obf />
+        <billboard_xml>asdf</billboard_xml>
+    </product_tour>
+    <views>
+        <image>sdf</image>
+        <image_obf />
+    </views>
+    <views>
+        <image>sdf</image>
+        <image_obf />
+    </views>
+    <views>
+        <image>sdf</image>
+        <image_obf />
+    </views>
+    <views>
+        <image>sdf</image>
+        <image_obf />
+    </views>
+    <views>
+        <image>adsf</image>
+        <image_obf />
+    </views>
+    <views>
+        <image>asdf</image>
+        <image_obf />
+    </views>
+    <views>
+        <title />
+        <swatch_image />
+        <swatch_image_obf />
+        <image>sdf</image>
+        <image_obf />
+    </views>
+    <views>
+        <title />
+        <swatch_image />
+        <swatch_image_obf />
+        <image>sdf</image>
+        <image_obf />
+    </views>
+    <views>
+        <title />
+        <swatch_image />
+        <swatch_image_obf />
+        <image>sdf</image>
+        <image_obf />
+    </views>
+    <views>
+        <title />
+        <swatch_image />
+        <swatch_image_obf />
+        <image>sdf</image>
+        <image_obf />
+    </views>
+    <views>
+        <title>asdf</title>
+        <swatch_image>asdf</swatch_image>
+        <swatch_image_obf />
+        <image>adsf</image>
+        <image_obf />
+    </views>
+    <views>
+        <title>asdf</title>
+        <swatch_image>asdf</swatch_image>
+        <swatch_image_obf />
+        <image>asdf</image>
+        <image_obf />
+    </views>
+</product_details>

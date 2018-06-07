@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.interwoven.teamsite.nikon.hibernate.beans">
+	<!-- Mapping to accessory table. Only contains the en_EU which is the golden set -->
+    <class name="Product2Award" table="V_PROD_AWARDS_GOLDEN">
+		<!-- PK -->
+		<composite-id name="id" class="Product2AwardPK" >
+			<key-property name="id" column="ID" type="string"/>
+			<key-property name="prodProdId" column="PROD_PROD_ID" type="string"/>
+			<key-property name="awardTestId" column="AWARD_TEST_ID" type="string"/>
+		</composite-id>
+		
+		<!-- Fields -->
+        <property name="nikonLocale" column="nikon_locale" type="string" not-null="false" />
+
+		<!-- prod_id of the included in BOM product -->        
+        <property name="prodProdId" column="PROD_PROD_ID" type="string" insert="false" update="false"/>
+        <property name="prodProdDevCode" column="PROD_PROD_DEV_CODE" type="string" insert="false" update="false"/>
+		
+		<!-- prod_id of the parent product it relates to -->        
+        <property name="awardTestId" column="AWARD_TEST_ID" type="string" insert="false" update="false"/>
+
+    </class>
+    <query name="nikonProduct2Award"  cacheable="false" cache-mode="normal">
+    <!-- 
+         This query lists all of the award testimonials
+         for a list of prod_ids 
+    -->
+    select p2aw
+    from Product2Award p2aw
+    where p2aw.prodProdId in (:productIds)
+    </query>
+</hibernate-mapping>

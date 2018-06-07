@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.interwoven.teamsite.nikon.hibernate.beans">
+    <import class="com.interwoven.teamsite.nikon.dto.PressLibraryDTO" /> 
+    
+    <class name="PressLibrary" table="V_IMAGE_LIBRARY">
+		<!-- PK -->
+        <id name="id" column="ID" type="string" />
+        <property name="nikonLocale" update="false"  column="NIKON_LOCALE" type="string" not-null="false" />
+        <property name="wwaDate" update="false"  column="WWA_DATE" type="date" not-null="true" />
+        <property name="path" update="false"  column="PATH" type="string" not-null="false" />
+        <property name="localAsset" update="false"  formula="LOCAL_ASSET" type="boolean" not-null="true" />
+        <property name="localAssetLocale" update="false"  column="LOCAL_ASSET_LANG_COUNTRY" type="string" not-null="false" />
+        <property name="localeAssetOptOut" update="false"  formula="LOCALE_OPT_OUT" type="boolean" not-null="true" />
+        <property name="localeAssetOptOutLocale" update="false"  column="LOCALE_OPT_OUT_LANG_COUNTRY" type="string" not-null="false" />
+        <property name="pressLibraryCategory" update="false"  column="CATEGORY" type="string" />
+        <property name="navCat1" update="false"  column="NAV_CAT_1" type="string" />
+        <property name="navCat2" update="false"  column="NAV_CAT_2" type="string" />
+        <property name="navCat3" update="false"  column="NAV_CAT_3" type="string" />
+        <property name="navName" update="false"  column="NAV_NAME" type="string" />
+		<property name="relatedProductLocaleShortName" update="false"  column="RELATED_PRODUCT_LOCALE_SHORT_NAME" type="string"/>
+		<property name="relatedProductShortName" update="false"  column="RELATED_PRODUCT_SHORT_NAME" type="string"/>
+		<!-- 
+         *** Notes ***
+         set inverse="true" on a bidirectional association to ensure only one set on inserts is done.
+         --> 
+
+     	<filter name="nikonWWADate" condition="((WWA_DATE is not null) AND (WWA_DATE &lt;= getDate()))" />
+
+    </class>
+    
+    <!-- Nav Category queries -->
+    <query name="nikonPressLibraryCat1" cacheable="false" cache-mode="normal">
+        select  pl
+        from    PressLibrary pl
+        where   pl.nikonLocale in (:nikonLocales)
+        and     pl.pressLibraryCategory = :nikonAssetCategory
+    </query>
+
+    <!-- Nav Category queries -->
+    <query name="nikonPressLibraryCat2" cacheable="false" cache-mode="normal">
+        select  pl
+        from    PressLibrary pl
+        where   pl.nikonLocale in (:nikonLocales)
+        and     pl.pressLibraryCategory = :nikonAssetCategory
+        and     pl.navCat1         =  :nikonNavCat1
+        order by pl.navCat2 asc, pl.wwaDate desc
+    </query>
+
+    <!-- Nav Category queries -->
+    <query name="nikonPressLibraryCat3" cacheable="false" cache-mode="normal">
+        select  pl
+        from    PressLibrary pl
+        where   pl.nikonLocale in (:nikonLocales)
+        and     pl.pressLibraryCategory = :nikonAssetCategory
+        and     pl.navCat1         =  :nikonNavCat1
+        and     pl.navCat2         =  :nikonNavCat2
+    </query>
+
+    <!-- Nav Category queries -->
+    <query name="nikonPressLibraryCat4" cacheable="false" cache-mode="normal">
+        select  pl
+        from    PressLibrary pl
+        where   pl.nikonLocale in (:nikonLocales)
+        and     pl.pressLibraryCategory = :nikonAssetCategory
+        and     pl.navCat1         =  :nikonNavCat1
+        and     pl.navCat2         =  :nikonNavCat2
+        and     pl.navCat3         =  :nikonNavCat3
+    </query>
+    
+
+</hibernate-mapping>

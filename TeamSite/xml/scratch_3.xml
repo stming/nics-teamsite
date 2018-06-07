@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<award_testimonials>
+    <awardslist>
+        <awardlist_heading>AwardList.Heading</awardlist_heading>
+        <awardlist_overview>AwardList.Overview</awardlist_overview>
+        <awardlist_image>AwardList.Image</awardlist_image>
+    </awardslist>
+    <testimonial>
+        <testimonial_heading>Testimonial.Heading</testimonial_heading>
+        <testimonial_overview>Testimonial.Overview</testimonial_overview>
+        <testimonial_image>Testimonial.Image</testimonial_image>
+        <testimonial_paragraph>Testimonial.Paragraph</testimonial_paragraph>
+    </testimonial>
+    <common_small_award_image>SmallImage</common_small_award_image>
+    <common_large_award_image>LargeImage</common_large_award_image>
+    <common_title>Title</common_title>
+    <common_short_title>ShortTitle</common_short_title>
+    <common_city>City</common_city>
+    <common_country>Country</common_country>
+</award_testimonials>

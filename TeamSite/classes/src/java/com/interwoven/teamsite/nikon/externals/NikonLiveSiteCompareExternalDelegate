@@ -1,0 +1,268 @@
+package com.interwoven.teamsite.nikon.externals;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.node.ArrayNode;
+import org.codehaus.jackson.node.ObjectNode;
+import org.dom4j.Document;
+import org.dom4j.Node;
+
+import com.interwoven.livesite.dom4j.Dom4jUtils;
+import com.interwoven.livesite.runtime.RequestContext;
+import com.interwoven.teamsite.ext.common.TeamsiteEnvironment;
+import com.interwoven.teamsite.ext.util.FormatUtils;
+import com.interwoven.teamsite.nikon.dto.HBN8QueryParamDTO;
+import com.interwoven.teamsite.nikon.dto.ProductDTO;
+import com.interwoven.teamsite.nikon.hibernate.manager.NikonHBN8DAOManager;
+
+public class NikonLiveSiteCompareExternalDelegate extends NikonLiveSiteBaseDelegate {
+
+	public NikonLiveSiteCompareExternalDelegate(){}
+
+	public NikonLiveSiteCompareExternalDelegate(NikonHBN8DAOManager dm, TeamsiteEnvironment env) {
+		super();
+		this.dm = dm;
+		this.environment = env;
+	}
+	
+	/**
+	 * Method to return compare data on given products
+	 * @param  requestContext
+	 * @return XMLDocument
+	 */
+	public Document listCompareDetails(RequestContext requestContext)
+	{
+		this.context = requestContext;
+		
+		FormatUtils.pFormat("ENVIRONMENT:{0}", getTeamsiteEnvironment().getEnvironment());
+        
+		log.debug("Entering Document listCompareDetails(RequestContext requestContext)");
+		log.debug("Creating HBN8QueryParamDTO");
+		
+		HBN8QueryParamDTO param = new HBN8QueryParamDTO(requestContext, getTeamsiteEnvironment());
+		
+		log.debug("-- HBN8QueryParamDTO param Start --");
+		log.debug(param.toString());
+		log.debug("-- HBN8QueryParamDTO param End --");
+
+		Document doc = _listCompareDetails(param, requestContext);
+		
+		return doc;
+		
+	}
+	
+	/**
+	 * Method to build the XML/JSON response for compare data on given products
+	 * @param  param
+	 * @param  requestContext
+	 * @return XMLDocument
+	 */
+	private Document _listCompareDetails(HBN8QueryParamDTO param, RequestContext requestContext)
+	{
+		//-----------------------------------------------------------
+		// Initialise Variables
+		//-----------------------------------------------------------
+		Document returnDocument = Dom4jUtils.newDocument();
+        
+		NikonLiveSiteHBN8ExternalDelegate HBN8ExternalDelegate = new NikonLiveSiteHBN8ExternalDelegate();
+		
+		List<Map<String,String>> mapProductDCRs = new ArrayList<Map<String,String>>();
+		List<Map<String,String>> mapProductSpecs = new ArrayList<Map<String,String>>();
+		
+		//-----------------------------------------------------------
+		// Retrieve Parameters From Query String
+		//-----------------------------------------------------------
+        String nikonLocale = requestContext.getParameterString("locale");
+        String[] compareIds = requestContext.getParameterString("prodNumbers").split(",");
+        
+        //-----------------------------------------------------------
+		// Process Each DCR
+        //-----------------------------------------------------------
+        for (int i = 0; i < compareIds.length; i++) {
+        
+        	//-----------------------------------------------
+			// DCR Variables
+			//-----------------------------------------------
+			Map<String, String> productInfo = new TreeMap<String, String>();
+			Map<String,String> productSpecifications = new HashMap<String, String>();
+			
+        	ProductDTO product = HBN8ExternalDelegate.retrieveProductFromIdCCode(compareIds[i], nikonLocale, requestContext);
+		
+        	Document productDoc = HBN8ExternalDelegate.listProductDetailsFromIdCCode(compareIds[i], nikonLocale, requestContext);
+        	
+        	// Product ID (Key - Product Id + _ + Locale)
+        	productInfo.put("Id", compareIds[i] + "_" + nikonLocale);
+        	
+        	// Product Number (Product Id)
+        	productInfo.put("Number", compareIds[i]);
+        	
+        	// Product Name (Meta / HBN8)
+        	productInfo.put("Title",  product.getLocalShortName());
+			
+			// Product Type (Meta / HBN8)
+			productInfo.put("ProdType", product.getType());
+			
+			// Product Category (Meta / HBN8)
+			productInfo.put("ProdCategory", product.getProductCategory());
+			
+			// Product NavCat1 (Meta / HBN8)
+			productInfo.put("ProdNavCat1", product.getNavCat1());
+			
+			// Product NavCat2 (Meta / HBN8)
+			productInfo.put("ProdNavCay2", product.getNavCat2());
+			
+			// Product NavCat3 (Meta / HBN8)
+			productInfo.put("ProdNavCay3", product.getNavCat3());
+			
+			// Product URL
+			productInfo.put("URL",  "/Nikon-Products/Product/Digital-SLR-Cameras/25442/D3X.html");
+        	
+        	// Product Overview Image (DCR)
+		    if (productDoc.getRootElement().selectSingleNode("Product/prod_overview_image") != null) {
+					
+				productInfo.put("ViewImage",  "/" + productDoc.getRootElement().selectSingleNode("Product/prod_overview_image").getText());
+			}
+			else if (productDoc.getRootElement().selectSingleNode("overview_image") != null) {
+		
+				productInfo.put("ViewImage",  "/" + productDoc.getRootElement().selectSingleNode("Product/overview_image").getText());
+			}
+		    
+		    // Product Specifications (DCR)
+			if (productDoc.getRootElement().selectSingleNode("Product/specifications") != null) {
+				   
+				  List <Node> accessoriesNodes = productDoc.getRootElement().selectNodes("Product/specifications/specification_detail");
+				  
+				  for ( Node n : accessoriesNodes )
+				  {
+					 if ((n.selectSingleNode("name") != null) && (n.selectSingleNode("description") != null)) {
+					
+						productSpecifications.put(n.selectSingleNode("name").getText(), n.selectSingleNode("description").getText());
+					 }
+					              					  
+				  }			   
+			}
+			
+			// Add Product Info
+			mapProductDCRs.add(productInfo);
+			
+			// Add Product Specifications
+			mapProductSpecs.add(productSpecifications);
+        }
+        
+        //=================================================================
+		// Create Set of Specification Keys Based On DCRs
+		//=================================================================
+		Set<String> sharedKeys = new HashSet<String>();
+		
+		for (Map<String, String> map : mapProductSpecs) {
+
+			for (Map.Entry entry : map.entrySet()) {
+					
+				sharedKeys.add(entry.getKey().toString());
+					
+			}			
+		}
+		
+		HashMap<String, String> allKeys = new HashMap<String, String>();
+		Iterator<String> it = sharedKeys.iterator();
+
+		while(it.hasNext()) {
+		
+			long randomKeyId = (long) Math.floor(Math.random() * 9000000000000L) + 1000000000000L;
+
+			allKeys.put(it.next().toString(), randomKeyId + "");
+		}
+		
+		//=================================================================
+		// Create JSON Response
+		//=================================================================
+		ObjectMapper mapper = new ObjectMapper();
+		ObjectNode rootObj = mapper.createObjectNode();
+		
+		// Product List
+		ArrayNode productListObj = rootObj.putArray("ProductList");
+		
+		// Loop Product DCR Info
+		int count = 0;
+		
+		for (Map<String, String> map : mapProductDCRs) {
+
+			ObjectNode productList = productListObj.addObject();
+			
+			// Add DCR General Info
+			for (Map.Entry entry : map.entrySet()) {
+				
+				productList.put(entry.getKey().toString(), entry.getValue().toString());
+			}
+			
+			// Tech Specs
+			ObjectNode techSpecsList = productList.putObject("TechSpecs");
+			
+			for (Map.Entry specEntry : mapProductSpecs.get(count).entrySet()) {
+				
+				ObjectNode id = techSpecsList.putObject(allKeys.get(specEntry.getKey().toString()));
+				
+				ArrayNode groupsArray = id.putArray("groups");
+				
+				ObjectNode groupArrayObject = groupsArray.addObject();
+				
+				groupArrayObject.put("prefix", "");
+				groupArrayObject.put("suffix", "");
+				
+				ArrayNode valuesArray = groupArrayObject.putArray("values");
+				valuesArray.add(specEntry.getValue().toString());
+				
+				groupArrayObject.put("notes", "");
+			}
+			
+			count++;
+		}
+
+		// Full Specs
+		ArrayNode fullSpecsArray = rootObj.putArray("FullSpecs");
+		
+		for (String key : allKeys.keySet()) {
+			
+			ObjectNode fullSpecsArrayObject = fullSpecsArray.addObject();
+			
+			fullSpecsArrayObject.put("Name", key);
+			
+			fullSpecsArrayObject.putArray("Ids").add(Long.valueOf(allKeys.get(key)));
+		}
+		
+		// Glance Specs
+		String glanceSpecValues[] = new String[]{"Effective pixels", "Image sensor", "Media", "ISO sensitivity (Recommended Exposure Index)", "Image size (pixels)"};
+		
+		ArrayNode glanceSpecsArray = rootObj.putArray("GlanceSpecs");
+		
+		for (int k = 0; k < glanceSpecValues.length; k++) {
+			
+			ObjectNode glanceSpecsArrayObject = glanceSpecsArray.addObject();
+		
+			glanceSpecsArrayObject.put("Name", glanceSpecValues[k]);
+		
+			String id = allKeys.get(glanceSpecValues[k]);
+			
+			glanceSpecsArrayObject.putArray("Ids").add(Long.valueOf(id));
+		
+		}
+
+		// Reviews
+		rootObj.putObject("Reviews");
+        
+		//=================================================================
+		// JSON Output
+		//=================================================================	
+		returnDocument.addElement("JSON").setText(rootObj.toString());
+		
+        return returnDocument;
+	}
+}

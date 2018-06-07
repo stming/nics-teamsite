@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+ 
+<beans>
+	<bean name="nealo" class="java.lang.String" singleton="false">
+		<constructor-arg>
+			<value>Hello World</value>
+		</constructor-arg>
+     </bean>
+     
+      <!-- Build my Hibernate Sesison Factory -->
+  
+      <bean id="nikon.teamsite.hibernate.SessionFactory"  
+      		class="com.interwoven.livesite.spring.orm.hibernate3.LocalSessionFactoryBean"
+      		singleton="true"		>
+          <property name="configLocation">
+              <value>com/interwoven/teamsite/nikon/hibernate/nikon_development.cfg.xml</value>
+          </property>
+      </bean>
+      <!-- Build my Hibernate Sesison Factory -->
+      <bean id="nikon.teamsite.Environment"  
+      		class="com.interwoven.teamsite.nikon.common.NikonTeamsiteEnvironmentX"
+      		singleton="true">
+          <property name="environment">
+              <value>DEVELOPMENT</value>
+          </property>
+      </bean>
+  
+      <!-- Build my DAO Manager and inject my Hibernate Session Factory and Environment -->
+      <bean id="nikon.hibernate.dao.manager" 
+      		class="com.interwoven.teamsite.nikon.hibernate.manager.NikonHBN8DAOManager"
+      		singleton="true">
+  			
+          <property name="teamsiteEnvironment">
+              <ref bean="nikon.teamsite.Environment" />
+          </property>
+  
+          <property name="sessionFactory">
+              <ref bean="nikon.teamsite.hibernate.SessionFactory" />
+          </property>
+  
+      </bean>
+     
+</beans>

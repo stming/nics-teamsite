@@ -1,0 +1,11 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+ 
+    <bean id="nikon.teamsite.hibernate.SessionFactory"  class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+        <property name="configLocation">
+            <value>props/HBN8.test.cfg.xml</value>
+        </property>
+    </bean>
+    
+</beans>	

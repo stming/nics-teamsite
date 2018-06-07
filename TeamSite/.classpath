@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="classes/src/java"/>
+	<classpathentry kind="src" path="classes/src/dbunit"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="lib" path="lib/log4j-1.2.15.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/junit 3.8.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/junitee 3.8.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jaxen-1.1.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/commons-collections-3.2.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/livesite-runtime.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/cssdkjava.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/cssdk_sci.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/cssdkiface.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/spring.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/servlet.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/hibernate3.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/cglib.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/livesite/asm.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jta.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/dbunit-2.3.0-javadoc.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/dbunit-2.3.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/slf4j-log4j12-1.5.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/slf4j-api-1.5.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/commons-beanutils-1.8.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jcs.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/odng.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/htmlparser.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/datasource.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/mail.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jtds-1.2.5.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/ehcache-core-2.1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/xercesImpl.jar"/>
+	<classpathentry kind="lib" path="lib/concurrent.jar"/>
+	<classpathentry kind="lib" path="lib/serverutils100.jar"/>
+	<classpathentry kind="lib" path="lib/axis.jar"/>
+	<classpathentry kind="lib" path="lib/json-java-3.0.jar"/>
+	<classpathentry kind="lib" path="lib/jackson-all-1.8.5.jar"/>
+	<classpathentry kind="lib" path="lib/commons-configuration-1.6.jar"/>
+	<classpathentry kind="lib" path="lib/ejb3-persistence.jar"/>
+	<classpathentry kind="lib" path="lib/hibernate-annotations.jar"/>
+	<classpathentry kind="lib" path="lib/hibernate-commons-annotations.jar"/>
+	<classpathentry kind="lib" path="lib/hibernate-entitymanager.jar"/>
+	<classpathentry kind="lib" path="lib/commons-cli.jar"/>
+	<classpathentry kind="lib" path="lib/htmllexer.jar"/>
+	<classpathentry kind="lib" path="lib/apache-solr-solrj-3.6.2.jar"/>
+	<classpathentry kind="lib" path="lib/json-java-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/json-lib-2.4-jdk15.jar"/>
+	<classpathentry kind="lib" path="lib/xom-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/ezmorph-1.0.6.jar"/>
+	<classpathentry kind="lib" path="lib/livesite/livesite.jar"/>
+	<classpathentry kind="lib" path="lib/livesite/foundation.jar"/>
+	<classpathentry kind="lib" path="lib/jsoup-1.7.2.jar"/>
+	<classpathentry kind="lib" path="lib/jxl.jar"/>
+	<classpathentry kind="lib" path="lib/super-csv-2.1.0.jar"/>
+	<classpathentry kind="lib" path="lib/modelerworkflowapi.jar"/>
+	<classpathentry kind="lib" path="lib/modelerCommon.jar"/>
+	<classpathentry kind="lib" path="lib/antlr.jar"/>
+	<classpathentry kind="lib" path="lib/asm.jar"/>
+	<classpathentry kind="lib" path="lib/commons-httpclient-3.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-io-1.4.jar"/>
+	<classpathentry kind="lib" path="lib/commons-lang-2.4.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/dom4j-1.6.1.jar"/>
+	<classpathentry kind="lib" path="lib/filterbuilder.jar"/>
+	<classpathentry kind="lib" path="lib/freemarker.jar"/>
+	<classpathentry kind="lib" path="lib/hibernate-tools.jar"/>
+	<classpathentry kind="lib" path="lib/jdom-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/MBWebServiceImpl.jar"/>
+	<classpathentry kind="lib" path="lib/MediaBinServer.jar"/>
+	<classpathentry kind="lib" path="lib/spring-ws-1.5.0.jar"/>
+	<classpathentry kind="lib" path="lib/tools.jar"/>
+	<classpathentry kind="lib" path="lib/xerces.jar"/>
+	<classpathentry kind="lib" path="lib/spring-webmvc-3.1.1.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/sqljdbc4.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

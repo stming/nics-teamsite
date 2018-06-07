@@ -1,0 +1,201 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.interwoven.teamsite.nikon.hibernate.beans">
+    <import class="com.interwoven.teamsite.nikon.dto.ProductDTO" />
+    <import class="com.interwoven.teamsite.nikon.common.NikonDomainConstants" />    
+    
+    <class name="Product" table="V_PRODUCT">
+		<!-- PK -->
+        <id name="id" column="ID" type="string" />
+        
+        <property name="prodId" update="false"  column="PROD_ID" type="string" />
+		<property name="prodDevCode" update="false"  column="PROD_DEV_CODE" type="string" not-null="false"/>
+        <property name="upc" update="false"  column="UPC" type="string" not-null="false" />
+        <property name="description" update="false"  column="PROD_DESCRIPTION" type="string" not-null="false" />
+        <property name="type" update="false"  column="PRODUCT_TYPE" type="string" not-null="true" />
+        <property name="wwaDate" update="false"  column="PROD_WWA_DATE" type="date" not-null="true" />
+        <property name="title" update="false"  column="TITLE" type="string" not-null="false" />
+        <property name="discontinued" update="false"  formula="DISCONTINUED" type="boolean" not-null="true" />
+        <property name="prodShortCode" update="false"  column="PROD_SHORT_CODE" type="string" not-null="false" />
+        <property name="prodShortName" update="false"  column="PROD_SHORT_NAME" type="string" not-null="false" />
+        <property name="prodAccessoryOf" update="false"  column="PROD_ACCESSORY_OF" type="string" not-null="false" />
+        <property name="nikonLocale" update="false"  column="NIKON_LOCALE" type="string" not-null="false" />
+        <property name="path" update="false"  column="PATH" type="string" not-null="false" />
+        <property name="sortOrder" update="false"  column="SORT_ORDER" type="string" not-null="false" />
+        <property name="stillNew" formula="CASE WHEN DATEDIFF(day, getDate(), ISNULL(end_of_new, getDate())) &gt; 0 THEN 'true' ELSE 'false' END" type="boolean"/>
+        <property name="localShortName" update="false"  column="LOCAL_SHORT_NAME" type="string" not-null="false" />
+        <property name="accessory" update="false" formula="CASE WHEN PRODUCT_TYPE = 'Accessory' THEN 'true' ELSE 'false' END" type="boolean"/>
+
+<!-- Meta Data added to work inside Teamsite -->
+        <property name="navCat1" update="false"  column="NAV_CAT_1" type="string" />
+        <property name="navCat2" update="false"  column="NAV_CAT_2" type="string" />
+        <property name="navCat3" update="false"  column="NAV_CAT_3" type="string" />
+        <property name="kit" update="false"  column="IS_KIT" type="boolean" />
+        <property name="productCategory" update="false"  column="PRODUCT_CATEGORY" type="string" />
+        
+        <property name="prodLocaleOptOut" update="true"  column="PROD_LOCALE_OPT_OUT" type="string" />
+        
+        <property name="migrated" update="false"  column="MIGRATED" type="boolean" />
+		<property name="localProduct" update="false" column="LOCAL_PROD" type="boolean" />
+				
+		<!-- 
+         *** Notes ***
+         set inverse="true" on a bidirectional association to ensure only one set on inserts is done.
+         --> 
+
+		<!-- TODO This currently loads all regions available into the Prices bag
+		would be better to restrict to only the escalation regions the manager is going to filter
+		out the regions not needed until a better resolution is found here -->
+     	<filter name="nikonWWADate" condition="((PROD_WWA_DATE is not null) AND (PROD_WWA_DATE &lt;= getDate()))" />
+
+    </class>
+
+    <!-- Single or List (of) ProductDTO given the prodId and list of Locales users Locale resolver to reduce to 0 or 1 -->
+    <query name="nikonSingleProductOnProdIdAndNikonLocale" cacheable="false" cache-mode="normal" >
+    	select p
+    	from  Product p
+    	where p.prodId        = :productId
+    	and   p.nikonLocale in (:nikonLocales) 
+    	and   p.prodId not in (	select ploo.prodId 
+        from   ProductLocaleOptOut ploo
+        where  ploo.id.prodId = p.prodId
+        and    ploo.id.localeOptOut = :nikonCountryCode)
+    </query>
+    
+    
+    <!--  Used for Aggregate queries -->
+    <query name="nikonMultiProductOnProdIdAndNikonLocale" cacheable="false" cache-mode="normal">
+    	select p
+    	from  Product p
+    	where p.prodId      in (:productIds)
+    	and   p.nikonLocale in (:nikonLocales) 
+    </query>
+    
+    <!-- Nav Category queries -->
+    <query name="nikonNavCat1" cacheable="false" cache-mode="normal">
+		select  p
+		from    Product p
+		where   p.nikonLocale    in (:nikonLocales)
+		and     p.productCategory =  :nikonProductCategory
+		and   ((p.kit is null) or (p.kit = false))
+		order by p.sortOrder
+    </query>
+    
+    <query name="nikonNavCat2" cacheable="false" cache-mode="normal">
+		select  p
+		from    Product p
+		where   p.nikonLocale    in (:nikonLocales)
+		and     p.productCategory =  :nikonProductCategory
+		and     p.navCat1         =  :nikonNavCat1
+		and   ((p.kit is null) or (p.kit = false))
+		order by p.sortOrder
+    </query>
+
+    <query name="nikonNavCat3" cacheable="false" cache-mode="normal">
+		select  p
+		from    Product p
+		where   p.nikonLocale    in (:nikonLocales)
+		and     p.productCategory =  :nikonProductCategory
+		and     p.navCat1         =  :nikonNavCat1
+		and     p.navCat2         =  :nikonNavCat2
+		and   ((p.kit is null) or (p.kit = false))
+		order by p.sortOrder
+    </query>
+
+    <query name="nikonNavCat4" cacheable="false" cache-mode="normal">
+		select  p
+		from    Product p
+		where   p.nikonLocale    in (:nikonLocales)
+		and     p.productCategory =  :nikonProductCategory
+		and     p.navCat1         =  :nikonNavCat1
+		and     p.navCat2         =  :nikonNavCat2
+		and     p.navCat3         =  :nikonNavCat3
+		and   ((p.kit is null) or (p.kit = false))
+		order by p.sortOrder
+    </query>
+    
+    <!--<query name="Product.nikonDiscontinuedProductIDsForLocale" cache-mode="normal">
+		select  distinct p.prodId
+		from    Product p
+		where   p.nikonLocale = :nikonLocale
+		and  	(p.kit is null or p.kit = false)
+		and     p.discontinued = true
+		order by p.prodId
+    </query>-->
+    
+    <!--<query name="Product.nikonActiveProductIDsForLocale" cache-mode="normal">
+		select  distinct p.prodId
+		from    Product p
+		where   p.nikonLocale = :nikonLocale
+		and  	(p.kit is null or p.kit = false)
+		and     p.discontinued = false
+		order by p.prodId
+    </query>-->
+    
+    <query name="Product.nikonRemovalOverrideProductIDsForLocale" cacheable="false" cache-mode="normal">
+		select  distinct p.prodId
+		from    Product p
+		where   p.nikonLocale = :nikonLocale
+		and  	(p.kit is null or p.kit = false)
+		and     p.discontinued = :discontinued
+		order by p.prodId
+    </query>
+
+    <query name="nikonProdCat1" cacheable="false" cache-mode="normal">
+		select  p
+		from    Product p
+		where   p.nikonLocale    in (:nikonLocales)
+		and     p.productCategory =  :nikonProductCategory
+		and   ((p.kit is null) or (p.kit = false))
+		order by p.sortOrder
+    </query>
+
+    <query name="nikonProdCat2" cacheable="false" cache-mode="normal">
+		select  p
+		from    Product p
+		where   p.nikonLocale    in (:nikonLocales)
+		and     p.productCategory =  :nikonProductCategory
+		and     p.navCat1         =  :nikonNavCat1
+		and   ((p.kit is null) or (p.kit = false))
+		order by p.sortOrder
+    </query>
+
+    <query name="nikonProdCat3" cacheable="false" cache-mode="normal">
+		select  p
+		from    Product p
+		where   p.nikonLocale    in (:nikonLocales)
+		and     p.productCategory =  :nikonProductCategory
+		and     p.navCat1         =  :nikonNavCat1
+		and     p.navCat2         =  :nikonNavCat2
+		and   ((p.kit is null) or (p.kit = false))
+		order by p.sortOrder
+    </query>
+
+    <query name="nikonProdCat4" cacheable="false" cache-mode="normal">
+		select  p
+		from    Product p
+		where   p.nikonLocale    in (:nikonLocales)
+		and     p.productCategory =  :nikonProductCategory
+		and     p.navCat1         =  :nikonNavCat1
+		and     p.navCat2         =  :nikonNavCat2
+		and     p.navCat3         =  :nikonNavCat3
+		and   ((p.kit is null) or (p.kit = false))
+		order by p.sortOrder
+    </query>
+    
+    <query name="nikonProdMetaDataFromPath" cacheable="false" cache-mode="normal">
+    	select p
+    	from Product p
+    	where ((p.path = :nikonProductPath) or (p.path = :nikonProductPathAlt))
+    </query>
+
+    <query name="nikonProdOnProdIdInDefault" cacheable="false" cache-mode="normal">
+        select p
+        from Product p
+        where p.prodId      = :productId
+        and   p.nikonLocale = :nikonCountryCode
+    </query>
+
+</hibernate-mapping>

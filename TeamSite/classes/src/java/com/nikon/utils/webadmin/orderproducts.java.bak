@@ -1,0 +1,332 @@
+package com.nikon.utils.webadmin;
+
+import java.io.*;
+import java.util.*;
+import javax.servlet.http.*;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.dom4j.*;
+import org.dom4j.io.*;
+import com.interwoven.livesite.external.*;
+import com.interwoven.livesite.file.*;
+import com.interwoven.livesite.dom4j.Dom4jUtils;
+import com.interwoven.livesite.runtime.RequestContext;
+import java.sql.*;
+import com.interwoven.livesite.runtime.servlet.RequestUtils;
+import com.nikon.utils.migfrmts.NewsArticleMultiple;
+
+/**
+ *
+ * @author epayne
+ */
+public class orderproducts {
+
+	private static Log log = LogFactory.getLog(orderproducts.class);
+	
+    /** default constructor */
+    public orderproducts() {
+
+
+    }
+
+    public Document orderproducts(RequestContext context) throws DocumentException {
+
+        //create doc
+        Document doc = Dom4jUtils.newDocument("<staticcontent/>");
+
+        //create variables
+        String selectProdType = "";
+        String selectProdTypePass = "";
+
+        //get database connection reqs
+        String pool = context.getParameterString("Pool");
+        Connection con = null;
+        Statement stmt = null;
+        ResultSet rs = null;
+
+
+        //-----work logic to see whether drop down has been submitted or not----
+        if (context.getRequest().getParameter("selectprodtypepass") == null) {
+            doc.getRootElement().addElement("xx").addText("PASSx = its blank ");
+        } else {
+            selectProdTypePass = context.getRequest().getParameter("selectprodtypepass");
+            doc.getRootElement().addElement("xx").addText("PASSx =  " + selectProdTypePass + "  <--");
+        }
+
+
+
+        if (context.getRequest().getParameter("selectprodtype") == null) {
+            doc.getRootElement().addElement("xxy").addText("DD = its blank ");
+            selectProdType = selectProdTypePass;
+        } else {
+            selectProdType = context.getRequest().getParameter("selectprodtype");
+            doc.getRootElement().addElement("xxy").addText("DD =  " + selectProdType + "  <--");
+        }
+
+
+
+
+
+        //selectprodtypepass
+        // Object submittedpass = context.getRequest().getParameter("submittedpass");
+
+
+
+
+        Object submitted = context.getRequest().getParameter("submitted");
+
+        if (submitted != null) {
+
+            selectProdType = context.getRequest().getParameter("selectprodtype");
+            doc.getRootElement().addElement("isSelected").addText(selectProdType);
+
+
+
+        }
+
+
+
+        //-----create drop down list----------------------------------------------
+        try {
+
+            //output feedback
+            doc.getRootElement().addElement("isSelected").addText(selectProdType);
+
+            //create select stm - make procedure depend on hibernate
+            String SQLDynQuery = "";
+            SQLDynQuery = "SELECT DISTINCT TOP (100) PERCENT ProductCategory " +
+                    "FROM  productmetadata " +
+                    "WHERE (Country = 'de_CH') AND (ProductCategory IS NOT NULL)" +
+                    "ORDER BY ProductCategory";
+
+
+            //start connection 
+            con = RequestUtils.getConnection(pool);
+            stmt = con.createStatement();
+            rs = stmt.executeQuery(SQLDynQuery);
+            //get data 
+            while (rs.next()) {
+
+                if (rs.getString(1) == null) {
+
+                } else {
+
+                    doc.getRootElement().addElement("ProductType").addText(rs.getString(1));
+                }
+
+            }
+
+
+            //close dbase
+            rs.close();
+            stmt.close();
+            con.close();
+
+
+        } catch (Exception e) {
+            //debug output
+            doc.getRootElement().addElement("connected").addText("CONNECTION ERROR");
+
+        } finally {
+        	if (rs != null) {
+        		try {
+        			rs.close();
+        		} catch (SQLException e){
+        			log.error("Error while trying to close result set", e);
+        		}
+        	}
+        	if (stmt != null) {
+        		try {
+        			stmt.close();
+        		} catch (SQLException e){
+        			log.error("Error while trying to close Statement", e);
+        		}
+        	}
+        	if (con != null) {
+        		try {
+        			con.close();
+        		} catch (SQLException e){
+        			log.error("Error while trying to close connection", e);
+        		}
+        	}
+        }
+
+        //-----if form is selected------------------------------------------------
+        if (context.getRequest().getParameter("saveString") == null) {
+
+        //DEBUG
+        //doc.getRootElement().addElement("sql").addText("");
+        } else {
+
+
+            //output feedback
+            doc.getRootElement().addElement("isSelected").addText(selectProdType);
+
+
+            String saveString = "";
+
+            saveString = context.getRequest().getParameter("saveString");
+
+
+
+            //Split data into an array
+            String[] values = saveString.split("#");
+            int currNo = 1;
+            String currNoText = "";
+            String SQLreorder = "";
+
+            for (int i = 0; i < values.length; i++) {
+
+
+                currNoText = Integer.toString(currNo);
+
+                SQLreorder = SQLreorder + "UPDATE productmetadata SET " +
+                        "NavOrder = " + currNo + " WHERE " +
+                        "Product = '" + values[i].replaceAll("'", "''") + "'" +
+                        "AND Country = 'de_CH';";
+
+                currNo = currNo + 1;
+            }
+
+
+            //now we have code, do database work
+            try {
+
+
+                //start connection 
+                con = RequestUtils.getConnection(pool);
+                stmt = con.createStatement();
+                rs = stmt.executeQuery(SQLreorder);
+                //close dbase
+
+
+            } catch (Exception e) {
+                //debug output
+                doc.getRootElement().addElement("connected").addText("UPDATE ERROR");
+
+            } finally {
+            	if (rs != null) {
+            		try {
+            			rs.close();
+            		} catch (SQLException e){
+            			log.error("Error while trying to close result set", e);
+            		}
+            	}
+            	if (stmt != null) {
+            		try {
+            			stmt.close();
+            		} catch (SQLException e){
+            			log.error("Error while trying to close Statement", e);
+            		}
+            	}
+            	if (con != null) {
+            		try {
+            			con.close();
+            		} catch (SQLException e){
+            			log.error("Error while trying to close connection", e);
+            		}
+            	}
+            }
+
+        }
+
+
+        //-----create tree------------------------------------------------------
+        if (!selectProdType.equals("")) {
+
+
+            //output feedback
+            doc.getRootElement().addElement("isSelected").addText(selectProdType);
+
+            //create dynamic sql
+            String SQLprodcode = "";
+
+            //create dynamic sql
+            SQLprodcode = "";
+            SQLprodcode = "SELECT Product, NavOrder " +
+                    "FROM productmetadata " +
+                    "WHERE  (ProductCategory = '" + selectProdType.replaceAll("'", "''") + "') " +
+                    "AND (Country = 'de_CH')" +
+                    "ORDER  BY  NavOrder";
+
+            try {
+
+
+
+                //start connection 
+                con = RequestUtils.getConnection(pool);
+                stmt = con.createStatement();
+                rs = stmt.executeQuery(SQLprodcode);
+                //get data 
+                while (rs.next()) {
+
+                    if (rs.getString(1) == null) {
+
+                    } else {
+
+                        doc.getRootElement().addElement("ProductCode").addText(rs.getString(1));
+                        doc.getRootElement().addElement("ProductOrder").addText(rs.getString(2));
+                    }
+
+                }
+
+
+                //close dbase
+
+
+
+            } catch (Exception e) {
+                //debug output
+                doc.getRootElement().addElement("connected").addText("CONNECTION ERROR");
+
+            } finally {
+            	if (rs != null) {
+            		try {
+            			rs.close();
+            		} catch (SQLException e){
+            			log.error("Error while trying to close result set", e);
+            		}
+            	}
+            	if (stmt != null) {
+            		try {
+            			stmt.close();
+            		} catch (SQLException e){
+            			log.error("Error while trying to close Statement", e);
+            		}
+            	}
+            	if (con != null) {
+            		try {
+            			con.close();
+            		} catch (SQLException e){
+            			log.error("Error while trying to close connection", e);
+            		}
+            	}
+            }
+
+        }
+
+
+
+
+        //-----inject js at bottom---------------------------------------------
+        //this js has to go at bottom
+        String jsInit = "";
+        jsInit = "<script type='text/javascript'>" +
+                "treeObj = new JSDragDropTree();" +
+                "treeObj.setTreeId('dhtmlgoodies_tree2');" +
+                "treeObj.setMaximumDepth(2);" +
+                "treeObj.setMessageMaximumDepthReached('Maximum depth reached');" +
+                "treeObj.initTree();" +
+                "treeObj.expandAll(); " +
+                "</script>";
+
+        context.getPageScopeData().put("body_injection_bottom", jsInit);
+
+
+        // return the XML to the component
+        return doc;
+    }
+    }
+
+

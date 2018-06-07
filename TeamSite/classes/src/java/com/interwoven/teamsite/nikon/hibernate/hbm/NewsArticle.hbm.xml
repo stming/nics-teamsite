@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.interwoven.teamsite.nikon.hibernate.beans">
+	<class name="NewsArticle" table="V_NEWS_ARTICLE">
+    	
+    	<!-- PK -->
+    	<id name="id" column="ID" type="string" />
+
+    	<!-- Properties -->
+
+		<property name="nikonLocale"      column="NIKON_LOCALE" type="string" />
+
+        <property name="relatesToProducts" column="RELATES_TO_PRODUCT" type="boolean"/>
+		<property name="path"              column="PATH" type="string" />
+		<property name="keepOnPage"        column="KEEP_ON_PAGE" type="boolean" />
+		<property name="wwaDate"           column="PROD_WWA_DATE"     type="date" />
+        <property name="sortOrder"         column="SORT_ORDER" type="short" />
+		
+		<!--  Not sure how to implement this yet -->
+		<!-- Actually implemented in the parameters used in the call to news_article_multiple below 
+     	<filter name="wwaDate" condition="1 == 1" />
+     	-->
+	</class>
+	
+	<sql-query name="nikonNavNewsArticle"  cacheable="false" callable="true">
+    	<return alias="NavNewsArticle" class="NewsArticle"/>
+ 		{call news_article_multiple(:nvNwsOpt, :nvNwsNmArts, :nvNewsQrt, :nvNwsSy, :nvNwsId, :countryCode, :enableWWADateFilter)}
+	</sql-query>
+</hibernate-mapping>

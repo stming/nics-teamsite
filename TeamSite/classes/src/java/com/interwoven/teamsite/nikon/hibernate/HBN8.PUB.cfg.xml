@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+
+    <session-factory>
+        <!-- Database connection settings -->
+        <property name="connection.driver_class">HBN8.PUB.connection.driver_class</property>
+        <property name="connection.url">HBN8.PUB.connection.url</property>
+        <property name="connection.username">HBN8.PUB.connection.username</property>
+        <property name="connection.password">HBN8.PUB.connection.password</property>
+        
+		<!-- configuration pool via c3p0--> 
+		<property name="hibernate.c3p0.acquire_increment">1</property> 
+		<property name="hibernate.c3p0.idle_test_period">100</property> <!-- seconds --> 
+		<property name="hibernate.c3p0.max_size">50</property> 
+		<property name="hibernate.c3p0.max_statements">0</property> 
+		<property name="hibernate.c3p0.min_size">10</property> 
+		<property name="hibernate.c3p0.timeout">100</property> <!-- seconds --> 
+	        
+        <!-- Basic Tuning values http://www.hibernate.org/hib_docs/reference/en/html/configuration-optional.html -->
+        <property name="hibernate.jdbc.fetch_size">40</property>
+        <property name="hibernate.default_batch_fetch_size">40</property>
+        <property name="hibernate.connection.autocommit">false</property>
+		<property name="hibernate.connection.release_mode">after_transaction</property>
+        <!-- SQL dialect -->
+        <property name="dialect">org.hibernate.dialect.SQLServerDialect</property>
+
+        <!-- JDBC connection pool (use the built-in) -->
+
+        <!-- Enable Hibernate's automatic session context management -->
+        <property name="current_session_context_class">thread</property>
+
+        <!-- Disable the second-level cache  -->
+        <property name="hibernate.cache.provider_class">net.sf.ehcache.hibernate.SingletonEhCacheProvider</property>
+
+		<property name="hibernate.cache.provider_configuration">/ehcache.xml</property>
+		
+        <!-- Echo all executed SQL to stdout -->
+        <property name="show_sql">HBN8.PUB.show_sql</property>
+        
+        <!-- Enable query cache -->
+        <property name="hibernate.cache.use_query_cache">true</property>
+        
+        <!-- Filters -->
+		<mapping resource="com/interwoven/teamsite/nikon/hibernate/hbm/Filters.hbm.xml"/>
+        
+        <!-- Main Class Mappings -->
+		<mapping resource="com/interwoven/teamsite/nikon/hibernate/hbm/Product.hbm.xml"/>
+		<mapping resource="com/interwoven/teamsite/nikon/hibernate/hbm/Product2Accessory.hbm.xml"/>
+		<mapping resource="com/interwoven/teamsite/nikon/hibernate/hbm/Product2Product.hbm.xml"/>
+		<mapping resource="com/interwoven/teamsite/nikon/hibernate/hbm/Product2Award.hbm.xml"/>
+		<mapping resource="com/interwoven/teamsite/nikon/hibernate/hbm/ProductLocaleOptOut.hbm.xml"/>
+		<mapping resource="com/interwoven/teamsite/nikon/hibernate/hbm/Product2Bom.hbm.xml"/>
+		<mapping resource="com/interwoven/teamsite/nikon/hibernate/hbm/Price.hbm.xml"/>
+		
+		<mapping resource="com/interwoven/teamsite/nikon/hibernate/hbm/Award.hbm.xml"/>
+		<mapping resource="com/interwoven/teamsite/nikon/hibernate/hbm/AwardTestimonial.hbm.xml"/>
+		<mapping resource="com/interwoven/teamsite/nikon/hibernate/hbm/AwardTest2Award.hbm.xml"/>
+
+		<mapping resource="com/interwoven/teamsite/nikon/hibernate/hbm/PressLibrary.hbm.xml"/>
+		<mapping resource="com/interwoven/teamsite/nikon/hibernate/hbm/Product2ProductMarketingRelated.hbm.xml"/>
+		
+		<class-cache class="com.interwoven.teamsite.nikon.hibernate.beans.Product" usage="read-only" />
+		<class-cache class="com.interwoven.teamsite.nikon.hibernate.beans.Product2Accessory" usage="read-only" />
+		<class-cache class="com.interwoven.teamsite.nikon.hibernate.beans.Product2Product" usage="read-only" />
+		<class-cache class="com.interwoven.teamsite.nikon.hibernate.beans.Product2Award" usage="read-only" />
+		<class-cache class="com.interwoven.teamsite.nikon.hibernate.beans.ProductLocaleOptOut" usage="read-only" />
+		<class-cache class="com.interwoven.teamsite.nikon.hibernate.beans.Product2Bom" usage="read-only" />
+		<class-cache class="com.interwoven.teamsite.nikon.hibernate.beans.Price" usage="read-only" />
+		<class-cache class="com.interwoven.teamsite.nikon.hibernate.beans.Award" usage="read-only" />
+		<class-cache class="com.interwoven.teamsite.nikon.hibernate.beans.AwardTestimonial" usage="read-only" />
+		<class-cache class="com.interwoven.teamsite.nikon.hibernate.beans.AwardTest2Award" usage="read-only" />
+		<class-cache class="com.interwoven.teamsite.nikon.hibernate.beans.PressLibrary" usage="read-only" />
+		<class-cache class="com.interwoven.teamsite.nikon.hibernate.beans.Product2ProductMarketingRelated" usage="read-only" />
+		
+    </session-factory>
+</hibernate-configuration>

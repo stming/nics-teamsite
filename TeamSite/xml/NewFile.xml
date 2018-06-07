@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DataCache>
+	<Key>//slug1/default/main/Nikon/BV/WORKAREA/BV/sites/BV/testpage.page</Key>
+	<DataCacheValidator>
+		<Key type="File">
+			<Property name="timestamp"></Property>
+			<Property name="digest"></Property>
+			<Value>\\slug1\default\main\Nikon\BV\WORKAREA\BV\templatedata\en_EU\gallery_component\data\default_dcr.meta</Value>
+		</Key>
+	</DataCacheValidator>
+	<Data>
+		<Normalised>
+			<Key name="\\slug1\default\main\Nikon\BV\WORKAREA\BV\templatedata\en_EU\gallery_component\data\default_dcr.meta.KeyWords" type="String">A,B,C</Key>
+			<Key name="\\slug1\default\main\Nikon\BV\WORKAREA\BV\templatedata\en_EU\promotional_component\data\training_dcr.meta.KeyWords" type="Sgtring">A,B,C</Key>
+		</Normalised>
+		<Origional>
+			<Key name="\\slug1\default\main\Nikon\BV\WORKAREA\BV\templatedata\en_EU\gallery_component\data\default_dcr.meta" type="xml">
+			<!-- Holds original XML -->
+			</Key>
+			<Key name="\\slug1\default\main\Nikon\BV\WORKAREA\BV\templatedata\en_EU\promotional_component\data\training_dcr.meta" type="xml">
+			<!-- Holds original XML -->
+			</Key>
+		</Origional>		
+	</Data>
+</DataCache>
+
+
+

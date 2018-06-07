@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!-- Products           10000001 to 19999999 -->
+<!-- Accessories        20000001 to 29999999 -->
+<!-- Awards             30000001 to 39999999 -->
+<!-- Award Testimonials 40000001 to 49999999 -->
+
+<dataset>
+
+    <!-- en_EU -->
+    <!--  Product -->
+    <metadata product_id="10000001" prod_dev_code="Q220" prod_wwa_date="2009-02-04 00:00:00" prod_locale_opt_out="" end_of_new="2010-02-04 00:00:00" relates_to_product="false"  discontinued="false" iskit="false" path="templatedata\en_EU\productdetails\data\Q220" state="Original" product_included_in_bom="" locale="en_EU" nikonlocale="en_EU" prod_short_code="D200" prod_related="" prod_description="" upc="018208910656" ProductCategory="Digital Cameras" NavCat1="SLR" NavCat2="Professional" product_short_name="Digital SLR Camera D200" prod_type="Product" product_accessory_of="" local_product="0" local_prod_lang_country="" />
+    
+    <metadata product_id="10000002" prod_dev_code="Q400" prod_wwa_date="2009-02-04 00:00:00" prod_locale_opt_out="" end_of_new="2010-02-04 00:00:00" relates_to_product="false"  discontinued="false" iskit="false" path="templatedata\en_EU\productdetails\data\Q440" state="Original" product_included_in_bom="" locale="en_EU" nikonlocale="en_EU" prod_short_code="D200" prod_related="" prod_description="" upc="018208910656" ProductCategory="Digital Cameras" NavCat1="SLR" NavCat2="Professional" product_short_name="Digital SLR Camera D200" prod_type="Product" product_accessory_of="" local_product="0" local_prod_lang_country="" />
+    
+    
+    <!-- de_CH -->
+    <metadata product_id="10000001" prod_dev_code="Q220" prod_wwa_date="2009-02-04 00:00:00" prod_locale_opt_out="" end_of_new="2010-02-04 00:00:00" relates_to_product="false"  discontinued="false" iskit="false" path="templatedata\de_CH\productdetails\data\Q220" state="Original" product_included_in_bom="" locale="de_CH" nikonlocale="de_CH" prod_short_code="D200" prod_related="" prod_description="" upc="018208910656" ProductCategory="Digital Cameras" NavCat1="SLR" NavCat2="Professional" product_short_name="Digital SLR Camera D200" prod_type="Product" product_accessory_of="" local_product="0" local_prod_lang_country="" />
+    
+    
+    <!-- Local Products -->
+    <metadata product_id="10000101" prod_dev_code="Q300_CH_DE_PRODUCT" prod_wwa_date="2009-02-04 00:00:00" prod_locale_opt_out="" end_of_new="2010-02-04 00:00:00" relates_to_product="false"  discontinued="false" iskit="true" path="templatedata\de_CH\productdetails\data\Q300_CH_DE_PRODUCT" state="Original" product_included_in_bom="Q333_CH_DE_BOM,Q220" locale="de_CH" nikonlocale="de_CH" prod_short_code="D200" prod_related="Q303_CH_DE_RELATED" prod_description="" upc="018208910656" ProductCategory="Digital Cameras" NavCat1="SLR" NavCat2="Professional" product_short_name="Digital SLR Camera D200" prod_type="Product" product_accessory_of="" local_product="1" local_prod_lang_country="HC_ed" />
+    
+    <metadata product_id="10000201" prod_dev_code="Q303_CH_DE_RELATED" prod_wwa_date="2009-02-04 00:00:00" prod_locale_opt_out="" end_of_new="2010-02-04 00:00:00" relates_to_product="false"  discontinued="false" iskit="false" path="templatedata\de_CH\productdetails\data\Q303_CH_DE_RELATED" state="Original" product_included_in_bom="" locale="de_CH" nikonlocale="de_CH" prod_short_code="D200" prod_related="" prod_description="" upc="018208910656" ProductCategory="Digital Cameras" NavCat1="SLR" NavCat2="Professional" product_short_name="Digital SLR Camera D200" prod_type="Product" product_accessory_of="" local_product="1" local_prod_lang_country="HC_ed" />
+    
+    <metadata product_id="10000301" prod_dev_code="Q333_CH_DE_BOM" prod_wwa_date="2009-02-04 00:00:00" prod_locale_opt_out="" end_of_new="2010-02-04 00:00:00" relates_to_product="false"  discontinued="false" iskit="false" path="templatedata\de_CH\productdetails\data\Q333_CH_DE_BOM" state="Original" product_included_in_bom="" locale="de_CH" nikonlocale="de_CH" prod_short_code="D200" prod_related="" prod_description="" upc="018208910656" ProductCategory="Digital Cameras" NavCat1="SLR" NavCat2="Professional" product_short_name="Digital SLR Camera D200" prod_type="Product" product_accessory_of="" local_product="1" local_prod_lang_country="HC_ed" />
+
+    <metadata product_id="10000401" prod_dev_code="CLP-3CH" prod_wwa_date="2010-02-04 00:00:00" prod_locale_opt_out="" end_of_new="2010-02-04 00:00:00" relates_to_product="false"  discontinued="false" iskit="false" path="templatedata\de_CH\productdetails\data\CLP-3CH" state="Original" product_included_in_bom="" locale="de_CH" nikonlocale="de_CH" prod_short_code="D200" prod_related="" prod_description="" upc="018208910656" ProductCategory="Digital Cameras" NavCat1="SLR" NavCat2="Professional" product_short_name="Digital SLR Camera D200" prod_type="Accessory" product_accessory_of="Q300_CH_DE_PRODUCT,Q220" local_product="1" local_prod_lang_country="HC_ed" />
+   
+    <!-- fr_CH -->
+    <metadata product_id="10000001" prod_dev_code="Q220" prod_wwa_date="2009-02-04 00:00:00" prod_locale_opt_out="" end_of_new="2010-02-04 00:00:00" relates_to_product="false"  discontinued="false" iskit="false" path="templatedata\fr_CH\productdetails\data\Q220" state="Original" product_included_in_bom="" locale="fr_CH" nikonlocale="fr_CH" prod_short_code="D200" prod_related="" prod_description="" upc="018208910656" ProductCategory="Digital Cameras" NavCat1="SLR" NavCat2="Professional" product_short_name="Digital SLR Camera D200" prod_type="Product" product_accessory_of="" local_product="0" local_prod_lang_country="" />
+
+    <!-- Local Products -->
+    <metadata product_id="10000101" prod_dev_code="Q300_CH_DE_PRODUCT" prod_wwa_date="2009-02-04 00:00:00" prod_locale_opt_out="" end_of_new="2010-02-04 00:00:00" relates_to_product="false"  discontinued="false" iskit="true" path="templatedata\fr_CH\productdetails\data\Q300_CH_DE_PRODUCT" state="Original" product_included_in_bom="" locale="fr_CH" nikonlocale="fr_CH" prod_short_code="D200" prod_related="" prod_description="" upc="018208910656" ProductCategory="Digital Cameras" NavCat1="SLR" NavCat2="Professional" product_short_name="Digital SLR Camera D200" prod_type="Product" product_accessory_of="" local_product="1" local_prod_lang_country="HC_ed" />
+
+    <metadata product_id="10000401" prod_dev_code="CLP-3CH" prod_wwa_date="2010-02-04 00:00:00" prod_locale_opt_out="" end_of_new="2010-02-04 00:00:00" relates_to_product="false"  discontinued="false" iskit="false" path="templatedata\fr_CH\productdetails\data\CLP-3CH" state="Original" product_included_in_bom="" locale="fr_CH" nikonlocale="fr_CH" prod_short_code="D200" prod_related="" prod_description="" upc="018208910656" ProductCategory="Digital Cameras" NavCat1="SLR" NavCat2="Professional" product_short_name="Digital SLR Camera D200" prod_type="Accessory" product_accessory_of="" local_product="1" local_prod_lang_country="HC_ed" />
+   
+   
+</dataset>

@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.interwoven.teamsite.nikon.hibernate.beans">
+    <import class="com.interwoven.teamsite.nikon.dto.AwardTestimonialDTO" />
+    
+	<class name="AwardTestimonial" table="V_AWARD_TESTIMONIAL">
+    	<!-- PK -->
+    	<id name="id" column="ID" type="string" />
+
+    	<!-- Properties -->
+		<property name="awardTestId" column="AWARD_TEST_ID" type="string"/>
+        <property name="year" formula="YEAR(TESTIMONIAL_DATE)" type="string"/>
+		<property name="testimonialDate" column="TESTIMONIAL_DATE" type="date"/>
+		<property name="prodRelated" column="PROD_RELATED" type="string"/>
+        <property name="awardAwardId" column="AWARD_AWARD_ID" type="string"/>
+		<property name="nikonLocale" column="NIKON_LOCALE" type="string" />
+		<property name="path" column="PATH" type="string" />
+	</class>
+	
+    <query name="nikonMultipleAwardTestimoniesOnAwardTestIdsAndNikonLocale"  cacheable="false" cache-mode="normal" >
+    <!-- 
+         This query lists all of the award testimonials
+         for given a list of awardTestIds 
+    -->
+    select at
+    from AwardTestimonial at
+    where at.awardTestId in (:awardTestIds)
+   	and   at.nikonLocale in (:nikonLocales)
+   	order by at.year desc
+    </query>
+	
+    <query name="nikonMultipleAwardTestimoniesInYear"  cacheable="false" cache-mode="normal" >
+    <!-- 
+         This query lists all of the award testimonials
+         for given year 
+    -->
+    select at
+    from AwardTestimonial at
+    where at.year = (:awardTestYear)
+   	and   at.nikonLocale in (:nikonLocales)
+   	order by at.year desc
+    </query>
+	
+</hibernate-mapping>

@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.interwoven.teamsite.nikon.hibernate.beans">
+	<!-- Mapping Award Testimonials to Awards. Only contains the en_EU which is the golden set -->
+    <class name="AwardTest2Award" table="V_TESTIMONIAL_RELATED_AWARD_GOLDEN">
+		<!-- PK -->
+		<composite-id name="id" class="AwardTest2AwardPK" >
+			<key-property name="id" column="ID " type="string"/>
+			<key-property name="awardAwardId" column="AWARD_AWARD_ID" type="string"/>
+			<key-property name="awardTestId" column="AWARD_TEST_ID" type="string"/>
+		</composite-id>
+		
+		<!-- Fields -->
+        <property name="awardAwardId" column="AWARD_AWARD_ID" type="string" insert="false" update="false"/>
+        <property name="awardTestId" column="AWARD_TEST_ID" type="string" insert="false" update="false"/>
+        <property name="nikonLocale" column="nikon_locale" type="string" not-null="false" />
+    </class>
+    <query name="nikonAwardTest2Award" cache-mode="normal" cacheable="false">
+    <!-- 
+         This query lists all of the award testimonials
+         for a list of prod_ids 
+    -->
+    select at2aw
+    from AwardTest2Award at2aw
+    where at2aw.awardTestId in (:awardTestIds)
+    </query>
+</hibernate-mapping>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<language_fallback_rules>
+    <countries>
+        <country_code>GB</country_code>
+        <language_code>en_GB</language_code>
+    </countries>
+    <countries>
+        <country_code>CH</country_code>
+        <language_code>fr_CH</language_code>
+        <language_code>de_CH</language_code>
+    </countries>
+</language_fallback_rules>

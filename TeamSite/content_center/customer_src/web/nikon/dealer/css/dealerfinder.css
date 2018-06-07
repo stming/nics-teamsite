@@ -1,0 +1,326 @@
+#df_intro
+{
+	font-style:italic;
+	padding-bottom: 5px;	
+}
+
+.df_search
+{
+	width: 1024px;
+	background: #cccccc;
+	padding: 5px;	
+}
+
+.df_toggle
+{
+	display: block;
+	text-align: right;
+}
+
+#df_advsearch
+{
+	display: none;	
+}
+
+#df_advsearch span
+{
+	display: block;	
+	padding-top: 3px;
+}
+
+#df_advsearch label
+{
+	display: block;
+	float: left;
+	font-weight: bold;
+	width: 110px;	
+}
+
+#df_advsearch_intro
+{
+	margin-bottom: 20px;	
+}
+
+#df_advSearchOtherFields
+{
+	padding: 5px;
+	margin: 5px;
+	border:1px dotted #000000;
+}
+
+#df_results
+{
+	display: none;	
+}
+
+#df_new
+{
+	display: block;	
+	margin: 10px;
+}
+
+#df_results
+{
+	width: 1024px;
+	margin-top: 20px;	
+}
+
+.fontBold
+{
+	font-weight: bold;	
+}
+
+#df_dealerstable
+{
+	border: 1px solid #ebebeb;
+	
+}
+
+#df_dealerstable thead
+{
+	background-color: rgb(156, 198, 196);
+	font-size: 12px;
+	color: fff;
+	text-align: left;
+	padding: 2px;	
+}
+
+#df_dealerstable thead th
+{
+	text-align: left;	
+}
+
+#df_dealerstable tbody tr
+{
+	font-size: 11px;
+	font-family: Verdana,sans-serif;	
+}
+
+#df_dealerstable tbody tr.odd
+{
+	background-color: #E6F2FF;
+}
+
+#df_dealerstable tbody tr.even
+{
+	background-color: #fff;
+}
+
+#df_dealerstable tbody tr.row_selected
+{
+	background-color: #eeeeee;	
+}
+
+#df_dealerstable tbody tr.record_visible
+{
+	background-color: #cccccc;	
+}
+
+#df_dealerstable td.green
+{
+	background-image:url('../img/green.png');
+	background-repeat:no-repeat;
+	background-position:center;
+}
+
+#df_dealerstable td.amber
+{
+	background-image:url('../img/amber.png');
+	background-repeat:no-repeat;
+	background-position:center;
+}
+
+#df_dealerstable td.red
+{
+	background-image:url('../img/red.png');
+	background-repeat:no-repeat;
+	background-position:center;
+}
+
+.dataTables_wrapper
+{
+	float: left;	
+	width: 100%;
+}
+
+.dataTables_length
+{
+	width: 40%;
+	float: left;
+	padding-bottom: 5px;	
+}
+.dataTables_filter
+{
+	width: 50%;
+	float: right;	
+	padding-bottom: 5px;
+	text-align: right;
+}
+.dataTables_info
+{
+	float: left;
+	width: 60%;	
+}
+
+.dataTables_paginate
+{
+	float: right;
+	width: 30%;
+	text-align: right;
+	padding-top: 5px;
+}
+
+.paginate_disabled_previous, .paginate_disabled_next 
+{
+	color: #ccc;
+	margin: 3px;	
+}
+
+#df_tablecontrols
+{
+	float: right;	
+	display: none;
+	padding-top: 5px;
+}
+
+#df_record
+{
+	padding-top: 8px;
+	float: left;
+	width: 1024px;
+	display: none;
+}
+
+#df_record_map
+{
+	width: 65%;
+	height: 500px;
+	float: left;	
+}
+
+#df_record_details
+{
+	margin-left: 10px;
+	float: left;
+	width: 30%;	
+}
+
+#df_record_details label
+{
+	font-weight: bold;
+	margin-top: 5px;
+}
+
+#df_record_details  input, #df_record_details  textarea
+{
+	font-family: Verdana,sans-serif;
+    font-size: 11px;
+	margin-top: 5px;
+}
+
+#df_record_details  select
+{
+	margin-top: 5px;
+}
+
+#df_record_details span.text, #df_record_details span.textarea, #df_record_details span.select
+{
+	background-color: #f0f0f0;
+	min-width: 10px;
+	display: inline-block;
+	min-height: 16px;
+	font-family: Verdana,sans-serif;
+    font-size: 11px;	
+}
+
+#df_record_details span.readonly
+{
+	margin-top: 5px;
+	min-width: 10px;
+	display: inline-block;
+	min-height: 16px;
+	font-family: Verdana,sans-serif;
+    font-size: 11px;	
+}
+
+.df_record_coordinates
+{
+	float: left;
+}
+
+#df_record_geocode
+{
+	float: right;	
+}
+
+#df_record_url_browse
+{
+	margin-left: 8px; 
+	float: right;
+}
+
+#df_record_buttons
+{
+	margin-top: 15px;	
+}
+
+/* dialogs */
+.df_dialog
+{
+	display: none;
+}
+
+.ui-widget
+{
+	font-size: 0.8em;	
+}
+
+.left
+{
+	clear: left;
+}
+
+.clear
+{
+	clear: both;
+}
+
+#df_status
+{
+	float: right;
+	padding-top: 6px;
+}
+
+#df_record_details h2
+{
+	float:left; 
+	padding: 0px; 
+	margin: 0px;
+}
+
+#checkAll
+{
+	float: left;
+}
+
+#df_record_additional
+{
+	padding-top: 5px;
+}
+
+#df_record_additional span
+{
+	width: 100%;
+	float: left;
+}
+
+#loadingScreen 
+{ 
+	padding-left: 25px; 
+} 
+
+.noclose .ui-dialog-titlebar-close
+{
+    display:none;
+}
+

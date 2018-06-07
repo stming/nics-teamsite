@@ -1,0 +1,15 @@
+*.class
+
+# Package Files #
+*.war
+*.ear
+
+.DS_Store
+TeamSite/bin
+TeamSite/build/
+/TeamSite/build/deploy/ACCEPTANCE/HBN8.ABF.cfg.xml
+/TeamSite/build/deploy/ACCEPTANCE/HBN8.PUB.cfg.xml
+/TeamSite/build/deploy/DEVELOPMENT/HBN8.ABF.cfg.xml
+/TeamSite/build/deploy/DEVELOPMENT/HBN8.PUB.cfg.xml
+/TeamSite/build/deploy/PRODUCTION/HBN8.ABF.cfg.xml
+/TeamSite/build/deploy/PRODUCTION/HBN8.PUB.cfg.xml

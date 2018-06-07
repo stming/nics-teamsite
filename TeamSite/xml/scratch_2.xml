@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<awards>
+    <homepage_title>Eisa.Title</homepage_title>
+    <homepage_heading>Eisa.Heading</homepage_heading>
+    <homepage_overview>Eisa.Overview</homepage_overview>
+    <homepage_image>Eisa.Image</homepage_image>
+    <testimonial_title>Eisa.Testimonial.Title</testimonial_title>
+    <testimonial_image>Eisa.Testimonial.Image</testimonial_image>
+    <product_image>Eisa.Product.Image</product_image>
+</awards>

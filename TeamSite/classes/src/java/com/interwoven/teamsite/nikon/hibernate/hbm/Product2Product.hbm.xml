@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.interwoven.teamsite.nikon.hibernate.beans">
+	<!-- Mapping to accessory table. Only contains the en_EU which is the golden set -->
+    <class name="Product2Product" table="V_PROD_RELATED_GOLDEN">
+		<!-- PK -->
+		<composite-id name="id" class="Product2ProductPK" >
+			<key-property name="id" column="id" type="string"/>
+			<key-property name="prodId" column="prod_id" type="string"/>
+			<key-property name="prodProdId" column="prod_prod_id" type="string"/>
+		</composite-id>
+		
+		<!-- Fields -->
+        
+        <property name="nikonLocale" column="nikon_locale" type="string" not-null="false" />
+
+		<!-- prod_id of the related product -->        
+        <property name="prodId" column="PROD_ID" type="string" insert="false" update="false"/>
+        <property name="prodDevCode" column="PROD_DEV_CODE" type="string" insert="false" update="false"/>
+		
+		<!-- prod_id of the parent product it relates to -->        
+        <property name="prodProdId" column="PROD_PROD_ID" type="string" insert="false" update="false"/>
+        <property name="prodProdDevCode" column="PROD_PROD_DEV_CODE" type="string" insert="false" update="false"/>
+     	
+     	<!-- Filters -->
+     	<filter name="nikonWWADate" condition="(((PROD_WWA_DATE IS NOT NULL) AND (PROD_WWA_DATE &lt;= getDate())) AND ((PROD_PROD_WWA_DATE IS NOT NULL) AND (PROD_PROD_WWA_DATE &lt;= getDate())))" />
+    </class>
+    
+    <query name="nikonProduct2Products"  cacheable="false" cache-mode="normal">
+    <!-- 
+         This query lists all of the related products for 
+         a list of products from the Golden Set of en_EU 
+      -->
+    select p2p
+    from   Product2Product p2p
+    where  p2p.prodProdId in (:productIds)
+    and    p2p.prodId is not null 
+    and    p2p.prodId not in 
+    (select ploo.prodId 
+     from   ProductLocaleOptOut ploo
+     where  ploo.id.prodId = p2p.prodId
+     and    ploo.id.localeOptOut = :nikonCountryCode)
+    </query>
+</hibernate-mapping>

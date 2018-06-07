@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.interwoven.teamsite.nikon.hibernate.beans">
+	<import class="com.interwoven.teamsite.nikon.dto.PriceDTO" />
+    
+    <class name="Price" table="V_PRICE">
+		<!-- PK -->
+		<id name="id" column="ID" type="string"/>
+        <property name="prodDevCode" column="PROD_DEV_CODE" type="string" not-null="true" />
+		<property name="nikonLocale" column="NIKON_LOCALE" type="string" not-null="true" />
+        <property name="priceIncVat" column="PRICE_INC_VAT" type="string" not-null="true" />
+		<property name="currenyCode" column="CURRENCY_CODE" type="string" not-null="true" />
+    
+    	<many-to-one name="Product" class="Product" column="PROD_DEV_CODE" insert="false" update="false" />
+    </class>
+    <query name="nikonMultiProductOnProdDevCodeAndNikonLocale" cacheable="false" cache-mode="refresh">
+    	select p
+    	from  Price p
+    	where p.prodDevCode in (:productDevCodes)
+    	and   p.nikonLocale = (:nikonLocale) 
+    </query>
+
+</hibernate-mapping>
