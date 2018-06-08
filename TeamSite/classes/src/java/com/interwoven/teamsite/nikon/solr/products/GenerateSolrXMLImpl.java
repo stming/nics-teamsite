@@ -1722,6 +1722,58 @@ public class GenerateSolrXMLImpl implements GenerateSolrXML {
    				  	solrDocElement.addElement("field").addAttribute("name", "variants_ss").setText(rootObj.toString());
 	       			
 	       		}
+	       		
+	       		else {
+	       			// Variants
+	       			List <Node> viewsNodes = null;
+	       			
+	       			ObjectMapper mapper = new ObjectMapper();
+   				  	ObjectNode rootObj = mapper.createObjectNode();
+   				  	
+   				  	// If Locale DCR Has Colors...Use It...
+	       			if ((lRootElement.selectSingleNode("Colourways") != null) && (!lRootElement.selectSingleNode("Colourways/title").getText().equals(""))) {
+	  				   
+	       				logger.info("Using Locale DCR Colours");
+	       				viewsNodes = lRootElement.selectNodes("Colourways");
+	       			
+	       			}
+	       			
+	       			if (viewsNodes != null) {
+	       				
+	       				int count = 0;
+	   				  	
+	   				  	for ( Node n : viewsNodes )
+	   				  	{
+	   				  		if (n.selectSingleNode("title") != null && !n.selectSingleNode("title").getText().equals("")
+	   						    && n.selectSingleNode("swatch_image") != null && !n.selectSingleNode("swatch_image").getText().equals("")
+	   						    && n.selectSingleNode("image") != null && !n.selectSingleNode("image").getText().equals("")) {
+	   				  			
+	   				  			ObjectNode idObject = rootObj.putObject(metaProductId + "_" + count);
+	   				  		
+	   				  			solrDocElement.addElement("field").addAttribute("name", "pnos_m_et").setText(metaProductId + "_" + count);
+	   				  		
+	   				  			ObjectNode colorObject = idObject.putObject("color");
+	   				  			
+	   				  			colorObject.put("parent_id", metaProductId + "_" + metaLocale);
+	   				  			colorObject.put("name", n.selectSingleNode("title").getText());
+	   				  			
+	   				  			logger.info("Adding Colour: " + n.selectSingleNode("title").getText());
+	   				  			
+	   				  			solrDocElement.addElement("field").addAttribute("name", "color_m_s").setText(n.selectSingleNode("title").getText());
+	   				  			solrDocElement.addElement("field").addAttribute("name", "color_m_ss").setText(n.selectSingleNode("title").getText());
+		    	       		
+	   				  			colorObject.put("swatch", n.selectSingleNode("swatch_image").getText());
+	   				  			colorObject.put("image", n.selectSingleNode("image").getText());
+	   				  			
+	   				  			count++;
+	   				  		}
+	   				  	}
+	       			}
+	       		
+   				  	solrDocElement.addElement("field").addAttribute("name", "variants_s").setText(rootObj.toString());
+   				  	solrDocElement.addElement("field").addAttribute("name", "variants_ss").setText(rootObj.toString());
+	       			
+	       		}
 	       	}
 			
 		}
