@@ -179,6 +179,14 @@ public class GenerateSolrXMLImpl implements GenerateSolrXML {
 	    String productFilterDFeatures = null;
 	    String productFilterDPrice = null;
 	    
+	    // Filter Variables - Mirrorless
+	    String productFilterMLType = null;
+	    String productFilterMLEffectivePixels = null;
+	    String productFilterMLImageSensorFormat = null;
+	    String productFilterMLMaximumISO = null;
+	    String productFilterMLFeatures = null;
+	    String productFilterMLPrice = null;
+	    
 	    // Filter Variables - DL
 	    String productFilterDlFeatures = null;
 	    String productFilterDlMovie = null;
@@ -218,6 +226,16 @@ public class GenerateSolrXMLImpl implements GenerateSolrXML {
 	    String productFilterLFormat = null;
 	    String productFilterLTechnology = null;
 	    String productFilterLPrice = null;
+	    
+	    // Filter Variables - Z-Mount Lenses
+	    String productFilterZMType = null;
+	    String productFilterZMCategories = null;
+	    String productFilterZMFocalMin = null;
+	    String productFilterZMFocalMax = null;
+	    String productFilterZMMaximumAperture = null;
+	    String productFilterZMFormat = null;
+	    String productFilterZMTechnology = null;
+	    String productFilterZMPrice = null;
 	    
 	    // Filter Variables - 1 Nikkor Lenses
 	    String productFilterN1LType = null;
@@ -425,6 +443,29 @@ public class GenerateSolrXMLImpl implements GenerateSolrXML {
 					productFilterDPrice = lRootElement.selectSingleNode("filter_dslr/price").getText();
 				}
 			
+			} else if (productFilterType.equalsIgnoreCase("mirrorless")) {
+				
+				if (lRootElement.selectSingleNode("filter_mirrorless/megapixels") != null) {
+
+					productFilterMLEffectivePixels = lRootElement.selectSingleNode("filter_mirrorless/megapixels").getText();
+				}
+				
+				
+				if (lRootElement.selectSingleNode("filter_mirrorless/maximum_iso") != null) {
+
+					productFilterMLMaximumISO = lRootElement.selectSingleNode("filter_mirrorless/maximum_iso").getText();
+				}
+				
+				if (lRootElement.selectSingleNode("filter_mirrorless/features") != null) {
+
+					productFilterMLFeatures = lRootElement.selectSingleNode("filter_mirrorless/features").getText();
+				}
+				
+				if (lRootElement.selectSingleNode("filter_mirrorless/price") != null) {
+
+					productFilterMLPrice = lRootElement.selectSingleNode("filter_mirrorless/price").getText();
+				}
+				
 			} else if (productFilterType.equalsIgnoreCase("dl")) {
 				
 				if (lRootElement.selectSingleNode("filter_dl/features") != null) {
@@ -587,6 +628,48 @@ public class GenerateSolrXMLImpl implements GenerateSolrXML {
 				if (lRootElement.selectSingleNode("filter_lens/price") != null) {
 
 					productFilterLPrice = lRootElement.selectSingleNode("filter_lens/price").getText();
+				}
+				
+			} else if (productFilterType.equalsIgnoreCase("nz_lens")) {
+				
+				if (lRootElement.selectSingleNode("filter_nzlens/type") != null) {
+
+					productFilterZMType = lRootElement.selectSingleNode("filter_nzlens/type").getText();
+				}
+				
+				if (lRootElement.selectSingleNode("filter_nzlens/categories") != null) {
+
+					productFilterZMCategories = lRootElement.selectSingleNode("filter_nzlens/categories").getText();
+				}
+				
+				if (lRootElement.selectSingleNode("filter_nzlens/minimum_focal_length") != null) {
+
+					productFilterZMFocalMin = lRootElement.selectSingleNode("filter_nzlens/minimum_focal_length").getText();
+				}
+				
+				if (lRootElement.selectSingleNode("filter_nzlens/maximum_focal_length") != null) {
+
+					productFilterZMFocalMax = lRootElement.selectSingleNode("filter_nzlens/maximum_focal_length").getText();
+				}
+				
+				if (lRootElement.selectSingleNode("filter_nzlens/maximum_aperture") != null) {
+
+					productFilterZMMaximumAperture = lRootElement.selectSingleNode("filter_nzlens/maximum_aperture").getText();
+				}
+				
+				if (lRootElement.selectSingleNode("filter_nzlens/lens_format") != null) {
+
+					productFilterZMFormat = lRootElement.selectSingleNode("filter_nzlens/lens_format").getText();
+				}
+				
+				if (lRootElement.selectSingleNode("filter_nzlens/technology") != null) {
+
+					productFilterZMTechnology = lRootElement.selectSingleNode("filter_nzlens/technology").getText();
+				}
+				
+				if (lRootElement.selectSingleNode("filter_nzlens/price") != null) {
+
+					productFilterZMPrice = lRootElement.selectSingleNode("filter_nzlens/price").getText();
 				}
 				
 			} else if (productFilterType.equalsIgnoreCase("n1_lens")) {
@@ -1093,6 +1176,99 @@ public class GenerateSolrXMLImpl implements GenerateSolrXML {
    				  	solrDocElement.addElement("field").addAttribute("name", "variants_s").setText(rootObj.toString());
    				  	solrDocElement.addElement("field").addAttribute("name", "variants_ss").setText(rootObj.toString());	       			
 	       		}
+	       		
+	       		// If Mirrorless Product...
+	       		else if (productFilterType.equalsIgnoreCase("mirrorless")) {
+	       			
+	       			// Effective Pixels
+	       			if ((productFilterMLEffectivePixels != null) && (!productFilterMLEffectivePixels.equals("")))
+	       			{
+	       				
+	       				solrDocElement.addElement("field").addAttribute("name", "effective_pixels_db").setText(productFilterMLEffectivePixels);
+	    	       		solrDocElement.addElement("field").addAttribute("name", "effective_pixels_sdb").setText(productFilterMLEffectivePixels);
+	       			}
+	       			
+	       			// Maximum ISO
+	       			if ((productFilterMLMaximumISO != null) && (!productFilterMLMaximumISO.equals(""))) 
+	       			{
+	       				
+	       				solrDocElement.addElement("field").addAttribute("name", "iso_max_i").setText(productFilterMLMaximumISO);
+	    	       		solrDocElement.addElement("field").addAttribute("name", "iso_max_si").setText(productFilterMLMaximumISO);
+	       			}
+	       			
+	       			// Features
+	       			if ((productFilterMLFeatures != null) && (!productFilterMLFeatures.equals(""))) 
+	       			{
+	       				
+	       				String[] productFeatures = productFilterMLFeatures.split(", ");
+	       				
+	       				for (int i = 0; i < productFeatures.length; i++) {
+	       					
+	       					solrDocElement.addElement("field").addAttribute("name", "features_m_s").setText(productFeatures[i]);
+		    	       		solrDocElement.addElement("field").addAttribute("name", "features_m_ss").setText(productFeatures[i]);
+	       					
+	       				}
+	       			}
+	       			
+	       			// Price
+	       			if ((productFilterMLPrice != null) && (!productFilterMLPrice.equals(""))) 
+	       			{
+	       				
+	       				solrDocElement.addElement("field").addAttribute("name", "price_db").setText(productFilterMLPrice);
+	    	       		solrDocElement.addElement("field").addAttribute("name", "price_sdb").setText(productFilterMLPrice);
+	       			}
+	       			
+	       			// Variants
+	       			List <Node> viewsNodes = null;
+	       			
+	       			ObjectMapper mapper = new ObjectMapper();
+   				  	ObjectNode rootObj = mapper.createObjectNode();
+   				  	
+   				  	// If Locale DCR Has Colors...Use It...
+	       			if ((lRootElement.selectSingleNode("Colourways") != null) && (!lRootElement.selectSingleNode("Colourways/title").getText().equals(""))) {
+	  				   
+	       				logger.info("Using Locale DCR Colours");
+	       				viewsNodes = lRootElement.selectNodes("Colourways");
+	       			
+	       			}
+	       			
+	       			if (viewsNodes != null) {
+	       				
+	       				int count = 0;
+	   				  	
+	   				  	for ( Node n : viewsNodes )
+	   				  	{
+	   				  		if (n.selectSingleNode("title") != null && !n.selectSingleNode("title").getText().equals("")
+	   						    && n.selectSingleNode("swatch_image") != null && !n.selectSingleNode("swatch_image").getText().equals("")
+	   						    && n.selectSingleNode("image") != null && !n.selectSingleNode("image").getText().equals("")) {
+	   				  			
+	   				  			ObjectNode idObject = rootObj.putObject(metaProductId + "_" + count);
+	   				  		
+	   				  			solrDocElement.addElement("field").addAttribute("name", "pnos_m_et").setText(metaProductId + "_" + count);
+	   				  		
+	   				  			ObjectNode colorObject = idObject.putObject("color");
+	   				  			
+	   				  			colorObject.put("parent_id", metaProductId + "_" + metaLocale);
+	   				  			colorObject.put("name", n.selectSingleNode("title").getText());
+	   				  			
+	   				  			logger.info("Adding Colour: " + n.selectSingleNode("title").getText());
+	   				  			
+	   				  			solrDocElement.addElement("field").addAttribute("name", "color_m_s").setText(n.selectSingleNode("title").getText());
+	   				  			solrDocElement.addElement("field").addAttribute("name", "color_m_ss").setText(n.selectSingleNode("title").getText());
+		    	       		
+	   				  			colorObject.put("swatch", n.selectSingleNode("swatch_image").getText());
+	   				  			colorObject.put("image", n.selectSingleNode("image").getText());
+	   				  			
+	   				  			count++;
+	   				  		}
+	   				  	}
+	       			}
+	       		
+   				  	solrDocElement.addElement("field").addAttribute("name", "variants_s").setText(rootObj.toString());
+   				  	solrDocElement.addElement("field").addAttribute("name", "variants_ss").setText(rootObj.toString());
+	       			
+	       		}
+	       		
 	       		// If DL Product...
 	       		else if (productFilterType.equalsIgnoreCase("dl")) {
 	       			
@@ -1599,7 +1775,90 @@ public class GenerateSolrXMLImpl implements GenerateSolrXML {
 	    	       		solrDocElement.addElement("field").addAttribute("name", "price_sdb").setText(productFilterLPrice);
 	       			}
 	       		
-	       		} // If 1 Nikkor Lens Product...
+	       		} 
+	       		// If Z-Mount Lens Product...
+	       		else if (productFilterType.equalsIgnoreCase("nz_lens")) {
+	       			
+	       			// Usage Type
+	       			if ((productFilterZMType != null) && (!productFilterZMType.equals("")))
+	       			{
+	       				
+	       				solrDocElement.addElement("field").addAttribute("name", "usage_s").setText(productFilterZMType);
+	    	       		solrDocElement.addElement("field").addAttribute("name", "usage_ss").setText(productFilterZMType);
+	       			}
+	       			
+	       			// Categories
+	       			if ((productFilterZMCategories != null) && (!productFilterZMCategories.equals(""))) 
+	       			{
+	       				
+	       				String[] productCategories = productFilterZMCategories.split(", ");
+	       				
+	       				for (int i = 0; i < productCategories.length; i++) {
+	       					
+	       					solrDocElement.addElement("field").addAttribute("name", "categories_m_s").setText(productCategories[i]);
+		    	       		solrDocElement.addElement("field").addAttribute("name", "categories_m_ss").setText(productCategories[i]);
+	       					
+	       				}
+	       			}
+	       			
+	       			// Focal Minimum
+	       			if ((productFilterZMFocalMin != null) && (!productFilterZMFocalMin.equals("")))
+	       			{
+	       				
+	       				solrDocElement.addElement("field").addAttribute("name", "focal_length_minimum_db").setText(productFilterZMFocalMin);
+	    	       		solrDocElement.addElement("field").addAttribute("name", "focal_length_minimum_sdb").setText(productFilterZMFocalMin);
+	    	       		solrDocElement.addElement("field").addAttribute("name", "focal_length_minimum_sort_sdb").setText(productFilterZMFocalMin);
+	       			}
+	       			
+	       			// Focal Maximum
+	       			if ((productFilterZMFocalMax != null) && (!productFilterZMFocalMax.equals("")))
+	       			{
+	       				
+	       				solrDocElement.addElement("field").addAttribute("name", "focal_length_maximum_db").setText(productFilterZMFocalMax);
+	    	       		solrDocElement.addElement("field").addAttribute("name", "focal_length_maximum_sdb").setText(productFilterZMFocalMax);
+	    	       		solrDocElement.addElement("field").addAttribute("name", "focal_length_maximum_sort_sdb").setText(productFilterZMFocalMax);
+	       			}
+	       			
+	       			// Maximum Aperture
+	       			if ((productFilterZMMaximumAperture != null) && (!productFilterZMMaximumAperture.equals("")))
+	       			{
+	       				
+	       				solrDocElement.addElement("field").addAttribute("name", "aperture_max_db").setText(productFilterZMMaximumAperture);
+	    	       		solrDocElement.addElement("field").addAttribute("name", "aperture_max_sdb").setText(productFilterZMMaximumAperture);
+	       			}
+					
+	       			// Lens Format
+	       			if ((productFilterZMFormat != null) && (!productFilterZMFormat.equals(""))) 
+	       			{	
+	       				solrDocElement.addElement("field").addAttribute("name", "lens_format_s").setText(productFilterZMFormat);
+	    	       		solrDocElement.addElement("field").addAttribute("name", "lens_format_ss").setText(productFilterZMFormat);
+	       			}
+	       			
+	       			// Technology
+	       			if ((productFilterZMTechnology != null) && (!productFilterZMTechnology.equals("")))
+	       			{
+	       				
+	       				String[] productTechnologies = productFilterZMTechnology.split(", ");
+	       				
+	       				for (int i = 0; i < productTechnologies.length; i++) {
+	       					
+	       					solrDocElement.addElement("field").addAttribute("name", "lens_technology_m_s").setText(productTechnologies[i]);
+		    	       		solrDocElement.addElement("field").addAttribute("name", "lens_technology_m_ss").setText(productTechnologies[i]);
+	       					
+	       				}
+	       			}
+	       			
+	       			// Price
+	       			if ((productFilterZMPrice != null) && (!productFilterZMPrice.equals(""))) 
+	       			{
+	       				
+	       				solrDocElement.addElement("field").addAttribute("name", "price_db").setText(productFilterZMPrice);
+	    	       		solrDocElement.addElement("field").addAttribute("name", "price_sdb").setText(productFilterZMPrice);
+	       			}
+	       			
+	       		}
+	       		
+	       		// If 1 Nikkor Lens Product...
 	       		else if (productFilterType.equalsIgnoreCase("n1_lens")) {
 	       			
 	       			// Lens Type
