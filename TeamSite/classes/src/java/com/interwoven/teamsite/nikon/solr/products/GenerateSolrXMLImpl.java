@@ -228,6 +228,7 @@ public class GenerateSolrXMLImpl implements GenerateSolrXML {
 	    String productFilterLPrice = null;
 	    
 	    // Filter Variables - Z-Mount Lenses
+	    String productFilterZMSLine = null;
 	    String productFilterZMType = null;
 	    String productFilterZMCategories = null;
 	    String productFilterZMFocalMin = null;
@@ -631,6 +632,11 @@ public class GenerateSolrXMLImpl implements GenerateSolrXML {
 				}
 				
 			} else if (productFilterType.equalsIgnoreCase("nz_lens")) {
+				
+				if (lRootElement.selectSingleNode("filter_nzlens/is_sline") != null) {
+
+					productFilterZMSLine = lRootElement.selectSingleNode("filter_nzlens/is_sline").getText();
+				}
 				
 				if (lRootElement.selectSingleNode("filter_nzlens/type") != null) {
 
@@ -1778,6 +1784,14 @@ public class GenerateSolrXMLImpl implements GenerateSolrXML {
 	       		} 
 	       		// If Z-Mount Lens Product...
 	       		else if (productFilterType.equalsIgnoreCase("nz_lens")) {
+	       			
+	       			// S-Line
+	       			if ((productFilterZMSLine != null) && (!productFilterZMSLine.equals("")))
+	       			{
+	       				
+	       				solrDocElement.addElement("field").addAttribute("name", "isSLine_s").setText(productFilterZMSLine);
+	    	       		solrDocElement.addElement("field").addAttribute("name", "isSLine_ss").setText(productFilterZMSLine);
+	       			}
 	       			
 	       			// Usage Type
 	       			if ((productFilterZMType != null) && (!productFilterZMType.equals("")))
