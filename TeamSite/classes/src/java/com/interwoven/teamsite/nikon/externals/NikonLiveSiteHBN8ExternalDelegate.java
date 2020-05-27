@@ -209,7 +209,8 @@ public class NikonLiveSiteHBN8ExternalDelegate extends NikonLiveSiteBaseDelegate
 			// If the product is an accessory then we need to get the
 			// products it is related to
 			// TODO Put in the DTO and create the neccessary
-			if (prod.isAccessory()) {
+			// 2020-05-27: Not limited to Accessory type only. For Product type, it's used for Related Products relationship.
+//			if (prod.isAccessory()) {
 				idCnt = 0;
 				for (final ProductDTO accOfProd : prod.getAccessoryOf()) {
 					final String nameId = FormatUtils.mFormat("accOfProd{0}", ++idCnt);
@@ -223,7 +224,7 @@ public class NikonLiveSiteHBN8ExternalDelegate extends NikonLiveSiteBaseDelegate
 								accOfProd.getNikonLocale()));
 					}
 				}
-			}
+//			}
 		}
 		log.debug("Exiting private Document _listProductDetailsDoc(RequestContext requestContext, ProductDTO prod)");
 		return doc;
@@ -1089,10 +1090,11 @@ public class NikonLiveSiteHBN8ExternalDelegate extends NikonLiveSiteBaseDelegate
 									this.insertChilds(doc.getRootElement(), prop.getProperty("MarketingRelated"),
 											"ProductMarketingRelated", "productMarketingRelated", repo, locales,
 											commerceMap);
-									if ("Accessory".equals(productType)) {
+									// 2020-05-27: Not limited to Accessory type only. For Product type, it's used for Related Products relationship.
+//									if ("Accessory".equals(productType)) {
 										this.insertChilds(doc.getRootElement(), prop.getProperty("AccessoryOf"),
 												"AccessoryOfProduct", "accOfProd", repo, locales, commerceMap);
-									}
+//									}
 									log.info("Finish loading [" + productId + "] in locale [" + productLocale
 											+ "], Loading time: " + (System.currentTimeMillis() - startTime) + "ms");
 									if (prodResponseJCS != null) {
