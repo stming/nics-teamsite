@@ -29,7 +29,9 @@ public class ServiceStatusCheck {
         mLogger.createLogInfo("Service Number: " + so_number);
         String ps_number = context.getParameterString("product_serial");
         mLogger.createLogInfo("Product Serial Number: " + ps_number);
-        String service_status_result = context.getParameterString("resultpage");
+        //String service_status_result = context.getParameterString("resultpage");
+		//hardcode service_status_result because of security issue
+		String service_status_result = "/sc_CN/service/service_result.page?";
         //End
 
         mLogger.createLogDebug("got result page ::" + service_status_result);
