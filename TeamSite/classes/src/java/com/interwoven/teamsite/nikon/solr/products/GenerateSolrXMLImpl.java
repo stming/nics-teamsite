@@ -268,6 +268,7 @@ public class GenerateSolrXMLImpl implements GenerateSolrXML {
 		String metaLocalShortName = null;
 		String metaActive = null;
 		String metaOptout = null;
+		String metaAvailableDate = null;
 		
 		try {
 			
@@ -380,6 +381,10 @@ public class GenerateSolrXMLImpl implements GenerateSolrXML {
 							}else{
 								metaOptout = "false";
 							}
+						} else if (name.equals("TeamSite/Metadata/available_date")) {
+							
+							metaAvailableDate = value;
+															
 						}
 					}
 			} 
@@ -1065,6 +1070,15 @@ public class GenerateSolrXMLImpl implements GenerateSolrXML {
 			{
 				solrDocElement.addElement("field").addAttribute("name", "local_title_ut").setText(metaLocalShortName);
 				solrDocElement.addElement("field").addAttribute("name", "local_title_text_ss").setText(metaLocalShortName);
+			}
+			
+			//----------------------------------------
+	       	// Product Available Date
+	       	//----------------------------------------
+			if ((metaAvailableDate != null) && (!metaAvailableDate.equals("")))
+			{
+				solrDocElement.addElement("field").addAttribute("name", "available_date_s").setText(metaAvailableDate);
+				solrDocElement.addElement("field").addAttribute("name", "available_date_ss").setText(metaAvailableDate);
 			}
 
 			//----------------------------------------
