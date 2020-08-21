@@ -82,8 +82,7 @@ public class DeleteTask implements CSURLExternalTask {
 						//------------------------------------------------------------------
 						logger.info("Locale DCR... Deleting Locale (" + localeLanguage + ")");
    						
-						solrOutputXML.addElement("query").setText("id:" + fileRelPath);
-
+						solrOutputXML.getRootElement().addElement("query").setText("id:" + fileRelPath);	
 					}
 
 				}
@@ -175,9 +174,8 @@ public class DeleteTask implements CSURLExternalTask {
 			}
 			
 		} catch (Exception e) {
-
-			e.printStackTrace();
-
+			logger.error(e.getMessage());
+			
 			//------------------------------------------------------------------
 			// Transition Task (Failure)
 			//------------------------------------------------------------------
