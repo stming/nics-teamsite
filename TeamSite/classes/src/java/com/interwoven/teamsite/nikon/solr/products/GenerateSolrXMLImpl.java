@@ -217,7 +217,7 @@ public class GenerateSolrXMLImpl implements GenerateSolrXML {
 	    String productFilterN1MaximumISO = null;
 	    String productFilterN1Price = null;
 	    
-	    // Filter Variables - Lenses
+	    // Filter Variables - NIKKOR Lenses
 	    String productFilterLType = null;
 	    String productFilterLCategories = null;
 	    String productFilterLFocalMin = null;
@@ -227,7 +227,7 @@ public class GenerateSolrXMLImpl implements GenerateSolrXML {
 	    String productFilterLTechnology = null;
 	    String productFilterLPrice = null;
 	    
-	    // Filter Variables - Z-Mount Lenses
+	    // Filter Variables - NIKKOR Z Lenses
 	    String productFilterZMSLine = null;
 	    String productFilterZMType = null;
 	    String productFilterZMCategories = null;
@@ -1091,7 +1091,7 @@ public class GenerateSolrXMLImpl implements GenerateSolrXML {
 	       		solrDocElement.addElement("field").addAttribute("name", "ptc_ss").setText(productFilterType.toUpperCase());
 	       		solrDocElement.addElement("field").addAttribute("name", "comp_b").setText(productCompare);
 	       		
-	       		// If DSLR Product...
+	       		// If DSLR Cameras...
 	       		if (productFilterType.equalsIgnoreCase("dslr") || productFilterType.equalsIgnoreCase("slr")) {
 	       			
 	       			// Usage Type
@@ -1140,21 +1140,21 @@ public class GenerateSolrXMLImpl implements GenerateSolrXML {
 	       			}
 	       			
 	       			// Price
-	       			if ((productFilterDPrice != null) && (!productFilterDPrice.equals(""))) 
-	       			{
-	       				
-	       				solrDocElement.addElement("field").addAttribute("name", "price_db").setText(productFilterDPrice);
-	    	       		solrDocElement.addElement("field").addAttribute("name", "price_sdb").setText(productFilterDPrice);
-	       			}
+//	       			if ((productFilterDPrice != null) && (!productFilterDPrice.equals(""))) 
+//	       			{
+//	       				
+//	       				solrDocElement.addElement("field").addAttribute("name", "price_db").setText(productFilterDPrice);
+//	    	       		solrDocElement.addElement("field").addAttribute("name", "price_sdb").setText(productFilterDPrice);
+//	       			}
 	       			
-	       			// Variants
+	       			// Colorways
 	       			List <Node> viewsNodes = null;
 	       			
 	       			ObjectMapper mapper = new ObjectMapper();
    				  	ObjectNode rootObj = mapper.createObjectNode();
    				  	
    				  	// If Locale DCR Has Colors...Use It...
-	       			if ((lRootElement.selectSingleNode("Colourways") != null) && (!lRootElement.selectSingleNode("Colourways/title").getText().equals(""))) {
+	       			if (lRootElement.selectSingleNode("Colourways") != null && !lRootElement.selectSingleNode("Colourways/swatch_image").getText().equals("")) {
 	  				   
 	       				logger.info("Using Locale DCR Colours");
 	       				viewsNodes = lRootElement.selectNodes("Colourways");
@@ -1167,8 +1167,7 @@ public class GenerateSolrXMLImpl implements GenerateSolrXML {
 	   				  	
 	   				  	for ( Node n : viewsNodes )
 	   				  	{
-	   				  		if (n.selectSingleNode("title") != null && !n.selectSingleNode("title").getText().equals("")
-	   						    && n.selectSingleNode("swatch_image") != null && !n.selectSingleNode("swatch_image").getText().equals("")
+	   				  		if (n.selectSingleNode("swatch_image") != null && !n.selectSingleNode("swatch_image").getText().equals("")
 	   						    && n.selectSingleNode("image") != null && !n.selectSingleNode("image").getText().equals("")) {
 	   				  			
 	   				  			ObjectNode idObject = rootObj.putObject(metaProductId + "_" + count);
@@ -1180,7 +1179,12 @@ public class GenerateSolrXMLImpl implements GenerateSolrXML {
 	   				  			colorObject.put("parent_id", metaProductId + "_" + metaLocale);
 	   				  			colorObject.put("name", n.selectSingleNode("title").getText());
 	   				  			
-	   				  			logger.info("Adding Colour: " + n.selectSingleNode("title").getText());
+	   				  			if (n.selectSingleNode("title") != null && !n.selectSingleNode("title").getText().equals("")) {
+	   				  				logger.info("Adding Colour: " + n.selectSingleNode("title").getText());
+	   				  			} else {
+	   				  				logger.info("Adding Colour: " + n.selectSingleNode("swatch_image").getText());
+	   				  			}
+	   				  			
 	   				  			
 	   				  			solrDocElement.addElement("field").addAttribute("name", "color_m_s").setText(n.selectSingleNode("title").getText());
 	   				  			solrDocElement.addElement("field").addAttribute("name", "color_m_ss").setText(n.selectSingleNode("title").getText());
@@ -1194,10 +1198,11 @@ public class GenerateSolrXMLImpl implements GenerateSolrXML {
 	       			}
 	       		
    				  	solrDocElement.addElement("field").addAttribute("name", "variants_s").setText(rootObj.toString());
-   				  	solrDocElement.addElement("field").addAttribute("name", "variants_ss").setText(rootObj.toString());	       			
+   				  	solrDocElement.addElement("field").addAttribute("name", "variants_ss").setText(rootObj.toString());
+	       			   			
 	       		}
 	       		
-	       		// If Mirrorless Product...
+	       		// If Mirrorless Cameras...
 	       		else if (productFilterType.equalsIgnoreCase("mirrorless")) {
 	       			
 	       			// Effective Pixels
@@ -1231,21 +1236,21 @@ public class GenerateSolrXMLImpl implements GenerateSolrXML {
 	       			}
 	       			
 	       			// Price
-	       			if ((productFilterMLPrice != null) && (!productFilterMLPrice.equals(""))) 
-	       			{
-	       				
-	       				solrDocElement.addElement("field").addAttribute("name", "price_db").setText(productFilterMLPrice);
-	    	       		solrDocElement.addElement("field").addAttribute("name", "price_sdb").setText(productFilterMLPrice);
-	       			}
+//	       			if ((productFilterMLPrice != null) && (!productFilterMLPrice.equals(""))) 
+//	       			{
+//	       				
+//	       				solrDocElement.addElement("field").addAttribute("name", "price_db").setText(productFilterMLPrice);
+//	    	       		solrDocElement.addElement("field").addAttribute("name", "price_sdb").setText(productFilterMLPrice);
+//	       			}
 	       			
-	       			// Variants
+	       			// Colorways
 	       			List <Node> viewsNodes = null;
 	       			
 	       			ObjectMapper mapper = new ObjectMapper();
    				  	ObjectNode rootObj = mapper.createObjectNode();
    				  	
    				  	// If Locale DCR Has Colors...Use It...
-	       			if ((lRootElement.selectSingleNode("Colourways") != null) && (!lRootElement.selectSingleNode("Colourways/title").getText().equals(""))) {
+	       			if (lRootElement.selectSingleNode("Colourways") != null && !lRootElement.selectSingleNode("Colourways/swatch_image").getText().equals("")) {
 	  				   
 	       				logger.info("Using Locale DCR Colours");
 	       				viewsNodes = lRootElement.selectNodes("Colourways");
@@ -1258,8 +1263,7 @@ public class GenerateSolrXMLImpl implements GenerateSolrXML {
 	   				  	
 	   				  	for ( Node n : viewsNodes )
 	   				  	{
-	   				  		if (n.selectSingleNode("title") != null && !n.selectSingleNode("title").getText().equals("")
-	   						    && n.selectSingleNode("swatch_image") != null && !n.selectSingleNode("swatch_image").getText().equals("")
+	   				  		if (n.selectSingleNode("swatch_image") != null && !n.selectSingleNode("swatch_image").getText().equals("")
 	   						    && n.selectSingleNode("image") != null && !n.selectSingleNode("image").getText().equals("")) {
 	   				  			
 	   				  			ObjectNode idObject = rootObj.putObject(metaProductId + "_" + count);
@@ -1271,7 +1275,12 @@ public class GenerateSolrXMLImpl implements GenerateSolrXML {
 	   				  			colorObject.put("parent_id", metaProductId + "_" + metaLocale);
 	   				  			colorObject.put("name", n.selectSingleNode("title").getText());
 	   				  			
-	   				  			logger.info("Adding Colour: " + n.selectSingleNode("title").getText());
+	   				  			if (n.selectSingleNode("title") != null && !n.selectSingleNode("title").getText().equals("")) {
+	   				  				logger.info("Adding Colour: " + n.selectSingleNode("title").getText());
+	   				  			} else {
+	   				  				logger.info("Adding Colour: " + n.selectSingleNode("swatch_image").getText());
+	   				  			}
+	   				  			
 	   				  			
 	   				  			solrDocElement.addElement("field").addAttribute("name", "color_m_s").setText(n.selectSingleNode("title").getText());
 	   				  			solrDocElement.addElement("field").addAttribute("name", "color_m_ss").setText(n.selectSingleNode("title").getText());
@@ -1289,17 +1298,17 @@ public class GenerateSolrXMLImpl implements GenerateSolrXML {
 	       			
 	       		}
 	       		
-	       		// If DL Product...
+	       		// If DL Cameras...
 	       		else if (productFilterType.equalsIgnoreCase("dl")) {
 	       			
-	       			// Variants
+	       			// Colorways
 	       			List <Node> viewsNodes = null;
 	       			
 	       			ObjectMapper mapper = new ObjectMapper();
    				  	ObjectNode rootObj = mapper.createObjectNode();
    				  	
    				  	// If Locale DCR Has Colors...Use It...
-	       			if ((lRootElement.selectSingleNode("Colourways") != null) && (!lRootElement.selectSingleNode("Colourways/title").getText().equals(""))) {
+	       			if (lRootElement.selectSingleNode("Colourways") != null && !lRootElement.selectSingleNode("Colourways/swatch_image").getText().equals("")) {
 	  				   
 	       				logger.info("Using Locale DCR Colours");
 	       				viewsNodes = lRootElement.selectNodes("Colourways");
@@ -1312,8 +1321,7 @@ public class GenerateSolrXMLImpl implements GenerateSolrXML {
 	   				  	
 	   				  	for ( Node n : viewsNodes )
 	   				  	{
-	   				  		if (n.selectSingleNode("title") != null && !n.selectSingleNode("title").getText().equals("")
-	   						    && n.selectSingleNode("swatch_image") != null && !n.selectSingleNode("swatch_image").getText().equals("")
+	   				  		if (n.selectSingleNode("swatch_image") != null && !n.selectSingleNode("swatch_image").getText().equals("")
 	   						    && n.selectSingleNode("image") != null && !n.selectSingleNode("image").getText().equals("")) {
 	   				  			
 	   				  			ObjectNode idObject = rootObj.putObject(metaProductId + "_" + count);
@@ -1325,7 +1333,12 @@ public class GenerateSolrXMLImpl implements GenerateSolrXML {
 	   				  			colorObject.put("parent_id", metaProductId + "_" + metaLocale);
 	   				  			colorObject.put("name", n.selectSingleNode("title").getText());
 	   				  			
-	   				  			logger.info("Adding Colour: " + n.selectSingleNode("title").getText());
+	   				  			if (n.selectSingleNode("title") != null && !n.selectSingleNode("title").getText().equals("")) {
+	   				  				logger.info("Adding Colour: " + n.selectSingleNode("title").getText());
+	   				  			} else {
+	   				  				logger.info("Adding Colour: " + n.selectSingleNode("swatch_image").getText());
+	   				  			}
+	   				  			
 	   				  			
 	   				  			solrDocElement.addElement("field").addAttribute("name", "color_m_s").setText(n.selectSingleNode("title").getText());
 	   				  			solrDocElement.addElement("field").addAttribute("name", "color_m_ss").setText(n.selectSingleNode("title").getText());
@@ -1340,6 +1353,7 @@ public class GenerateSolrXMLImpl implements GenerateSolrXML {
 	       		
    				  	solrDocElement.addElement("field").addAttribute("name", "variants_s").setText(rootObj.toString());
    				  	solrDocElement.addElement("field").addAttribute("name", "variants_ss").setText(rootObj.toString());
+	       			
 	       			
 	       			// Features
 	       			if ((productFilterDlFeatures != null) && (!productFilterDlFeatures.equals(""))) 
@@ -1388,26 +1402,26 @@ public class GenerateSolrXMLImpl implements GenerateSolrXML {
 	       			}
 	       			
 	       			// Price
-	       			if ((productFilterDlPrice != null) && (!productFilterDlPrice.equals(""))) 
-	       			{
-	       				
-	       				solrDocElement.addElement("field").addAttribute("name", "price_db").setText(productFilterDlPrice);
-	    	       		solrDocElement.addElement("field").addAttribute("name", "price_sdb").setText(productFilterDlPrice);
-	       			}
+//	       			if ((productFilterDlPrice != null) && (!productFilterDlPrice.equals(""))) 
+//	       			{
+//	       				
+//	       				solrDocElement.addElement("field").addAttribute("name", "price_db").setText(productFilterDlPrice);
+//	    	       		solrDocElement.addElement("field").addAttribute("name", "price_sdb").setText(productFilterDlPrice);
+//	       			}
 	       			
 	       		}
 	       		
-	       		// If KeyMission Product...
+	       		// If KeyMission Cameras...
 	       		else if (productFilterType.equalsIgnoreCase("keymission")) {
 	       			
-	       			// Variants
+	       			// Colorways
 	       			List <Node> viewsNodes = null;
 	       			
 	       			ObjectMapper mapper = new ObjectMapper();
    				  	ObjectNode rootObj = mapper.createObjectNode();
    				  	
    				  	// If Locale DCR Has Colors...Use It...
-	       			if ((lRootElement.selectSingleNode("Colourways") != null) && (!lRootElement.selectSingleNode("Colourways/title").getText().equals(""))) {
+	       			if (lRootElement.selectSingleNode("Colourways") != null && !lRootElement.selectSingleNode("Colourways/swatch_image").getText().equals("")) {
 	  				   
 	       				logger.info("Using Locale DCR Colours");
 	       				viewsNodes = lRootElement.selectNodes("Colourways");
@@ -1420,8 +1434,7 @@ public class GenerateSolrXMLImpl implements GenerateSolrXML {
 	   				  	
 	   				  	for ( Node n : viewsNodes )
 	   				  	{
-	   				  		if (n.selectSingleNode("title") != null && !n.selectSingleNode("title").getText().equals("")
-	   						    && n.selectSingleNode("swatch_image") != null && !n.selectSingleNode("swatch_image").getText().equals("")
+	   				  		if (n.selectSingleNode("swatch_image") != null && !n.selectSingleNode("swatch_image").getText().equals("")
 	   						    && n.selectSingleNode("image") != null && !n.selectSingleNode("image").getText().equals("")) {
 	   				  			
 	   				  			ObjectNode idObject = rootObj.putObject(metaProductId + "_" + count);
@@ -1433,7 +1446,12 @@ public class GenerateSolrXMLImpl implements GenerateSolrXML {
 	   				  			colorObject.put("parent_id", metaProductId + "_" + metaLocale);
 	   				  			colorObject.put("name", n.selectSingleNode("title").getText());
 	   				  			
-	   				  			logger.info("Adding Colour: " + n.selectSingleNode("title").getText());
+	   				  			if (n.selectSingleNode("title") != null && !n.selectSingleNode("title").getText().equals("")) {
+	   				  				logger.info("Adding Colour: " + n.selectSingleNode("title").getText());
+	   				  			} else {
+	   				  				logger.info("Adding Colour: " + n.selectSingleNode("swatch_image").getText());
+	   				  			}
+	   				  			
 	   				  			
 	   				  			solrDocElement.addElement("field").addAttribute("name", "color_m_s").setText(n.selectSingleNode("title").getText());
 	   				  			solrDocElement.addElement("field").addAttribute("name", "color_m_ss").setText(n.selectSingleNode("title").getText());
@@ -1448,6 +1466,7 @@ public class GenerateSolrXMLImpl implements GenerateSolrXML {
 	       		
    				  	solrDocElement.addElement("field").addAttribute("name", "variants_s").setText(rootObj.toString());
    				  	solrDocElement.addElement("field").addAttribute("name", "variants_ss").setText(rootObj.toString());
+	       			
 	       			
    				  	// Animation
 	       			if ((productFilterKmAnimation != null) && (!productFilterKmAnimation.equals(""))) 
@@ -1489,7 +1508,7 @@ public class GenerateSolrXMLImpl implements GenerateSolrXML {
 	       			
 	       		}
 	       		
-	       		// If COOLPIX Product...
+	       		// If COOLPIX Cameras...
 	       		else if (productFilterType.equalsIgnoreCase("coolpix")) {
 	       			
 	       			// Usage Type
@@ -1500,25 +1519,19 @@ public class GenerateSolrXMLImpl implements GenerateSolrXML {
 	    	       		solrDocElement.addElement("field").addAttribute("name", "usage_ss").setText(productFilterCType);
 	       			}
 	       			
-	       			// Variants
+	       			// Colorways
 	       			List <Node> viewsNodes = null;
 	       			
 	       			ObjectMapper mapper = new ObjectMapper();
    				  	ObjectNode rootObj = mapper.createObjectNode();
    				  	
    				  	// If Locale DCR Has Colors...Use It...
-	       			if ((lRootElement.selectSingleNode("Colourways") != null) && (!lRootElement.selectSingleNode("Colourways/title").getText().equals(""))) {
+	       			if (lRootElement.selectSingleNode("Colourways") != null && !lRootElement.selectSingleNode("Colourways/swatch_image").getText().equals("")) {
 	  				   
 	       				logger.info("Using Locale DCR Colours");
 	       				viewsNodes = lRootElement.selectNodes("Colourways");
 	       			
 	       			}
-	       			// Else Use en_Asia DCR...
-	       			/*else {
-	       			
-	       				logger.info("Using en_Asia DCR Colours");
-	       				viewsNodes = mRootElement.selectNodes("Colourways");
-	       			}*/
 	       			
 	       			if (viewsNodes != null) {
 	       				
@@ -1526,8 +1539,7 @@ public class GenerateSolrXMLImpl implements GenerateSolrXML {
 	   				  	
 	   				  	for ( Node n : viewsNodes )
 	   				  	{
-	   				  		if (n.selectSingleNode("title") != null && !n.selectSingleNode("title").getText().equals("")
-	   						    && n.selectSingleNode("swatch_image") != null && !n.selectSingleNode("swatch_image").getText().equals("")
+	   				  		if (n.selectSingleNode("swatch_image") != null && !n.selectSingleNode("swatch_image").getText().equals("")
 	   						    && n.selectSingleNode("image") != null && !n.selectSingleNode("image").getText().equals("")) {
 	   				  			
 	   				  			ObjectNode idObject = rootObj.putObject(metaProductId + "_" + count);
@@ -1539,7 +1551,12 @@ public class GenerateSolrXMLImpl implements GenerateSolrXML {
 	   				  			colorObject.put("parent_id", metaProductId + "_" + metaLocale);
 	   				  			colorObject.put("name", n.selectSingleNode("title").getText());
 	   				  			
-	   				  			logger.info("Adding Colour: " + n.selectSingleNode("title").getText());
+	   				  			if (n.selectSingleNode("title") != null && !n.selectSingleNode("title").getText().equals("")) {
+	   				  				logger.info("Adding Colour: " + n.selectSingleNode("title").getText());
+	   				  			} else {
+	   				  				logger.info("Adding Colour: " + n.selectSingleNode("swatch_image").getText());
+	   				  			}
+	   				  			
 	   				  			
 	   				  			solrDocElement.addElement("field").addAttribute("name", "color_m_s").setText(n.selectSingleNode("title").getText());
 	   				  			solrDocElement.addElement("field").addAttribute("name", "color_m_ss").setText(n.selectSingleNode("title").getText());
@@ -1554,6 +1571,7 @@ public class GenerateSolrXMLImpl implements GenerateSolrXML {
 	       		
    				  	solrDocElement.addElement("field").addAttribute("name", "variants_s").setText(rootObj.toString());
    				  	solrDocElement.addElement("field").addAttribute("name", "variants_ss").setText(rootObj.toString());
+	       			
 	       			
 	       			// Features
 	       			if ((productFilterCFeatures != null) && (!productFilterCFeatures.equals(""))) 
@@ -1602,36 +1620,30 @@ public class GenerateSolrXMLImpl implements GenerateSolrXML {
 	       			}
 	       			
 	       			// Price
-	       			if ((productFilterCPrice != null) && (!productFilterCPrice.equals(""))) 
-	       			{
-	       				
-	       				solrDocElement.addElement("field").addAttribute("name", "price_db").setText(productFilterCPrice);
-	    	       		solrDocElement.addElement("field").addAttribute("name", "price_sdb").setText(productFilterCPrice);
-	       			}
+//	       			if ((productFilterCPrice != null) && (!productFilterCPrice.equals(""))) 
+//	       			{
+//	       				
+//	       				solrDocElement.addElement("field").addAttribute("name", "price_db").setText(productFilterCPrice);
+//	    	       		solrDocElement.addElement("field").addAttribute("name", "price_sdb").setText(productFilterCPrice);
+//	       			}
 	       			
 	       		}
-	       		// If Nikon 1 ACIL Product...
+	       		// If Nikon 1 Cameras...
 	       		else if (productFilterType.equalsIgnoreCase("n1_acil")) {
 	       			
-	       			// Variants
+	       			// Colorways
 	       			List <Node> viewsNodes = null;
 	       			
 	       			ObjectMapper mapper = new ObjectMapper();
    				  	ObjectNode rootObj = mapper.createObjectNode();
    				  	
    				  	// If Locale DCR Has Colors...Use It...
-	       			if ((lRootElement.selectSingleNode("Colourways") != null) && (!lRootElement.selectSingleNode("Colourways/title").getText().equals(""))) {
+	       			if (lRootElement.selectSingleNode("Colourways") != null && !lRootElement.selectSingleNode("Colourways/swatch_image").getText().equals("")) {
 	  				   
 	       				logger.info("Using Locale DCR Colours");
 	       				viewsNodes = lRootElement.selectNodes("Colourways");
 	       			
 	       			}
-	       			// Else Use en_Asia DCR...
-	       			/*else {
-	       			
-	       				logger.info("Using en_Asia DCR Colours");
-	       				viewsNodes = mRootElement.selectNodes("Colourways");
-	       			}*/
 	       			
 	       			if (viewsNodes != null) {
 	       				
@@ -1639,8 +1651,7 @@ public class GenerateSolrXMLImpl implements GenerateSolrXML {
 	   				  	
 	   				  	for ( Node n : viewsNodes )
 	   				  	{
-	   				  		if (n.selectSingleNode("title") != null && !n.selectSingleNode("title").getText().equals("")
-	   						    && n.selectSingleNode("swatch_image") != null && !n.selectSingleNode("swatch_image").getText().equals("")
+	   				  		if (n.selectSingleNode("swatch_image") != null && !n.selectSingleNode("swatch_image").getText().equals("")
 	   						    && n.selectSingleNode("image") != null && !n.selectSingleNode("image").getText().equals("")) {
 	   				  			
 	   				  			ObjectNode idObject = rootObj.putObject(metaProductId + "_" + count);
@@ -1652,7 +1663,12 @@ public class GenerateSolrXMLImpl implements GenerateSolrXML {
 	   				  			colorObject.put("parent_id", metaProductId + "_" + metaLocale);
 	   				  			colorObject.put("name", n.selectSingleNode("title").getText());
 	   				  			
-	   				  			logger.info("Adding Colour: " + n.selectSingleNode("title").getText());
+	   				  			if (n.selectSingleNode("title") != null && !n.selectSingleNode("title").getText().equals("")) {
+	   				  				logger.info("Adding Colour: " + n.selectSingleNode("title").getText());
+	   				  			} else {
+	   				  				logger.info("Adding Colour: " + n.selectSingleNode("swatch_image").getText());
+	   				  			}
+	   				  			
 	   				  			
 	   				  			solrDocElement.addElement("field").addAttribute("name", "color_m_s").setText(n.selectSingleNode("title").getText());
 	   				  			solrDocElement.addElement("field").addAttribute("name", "color_m_ss").setText(n.selectSingleNode("title").getText());
@@ -1667,6 +1683,7 @@ public class GenerateSolrXMLImpl implements GenerateSolrXML {
 	       		
    				  	solrDocElement.addElement("field").addAttribute("name", "variants_s").setText(rootObj.toString());
    				  	solrDocElement.addElement("field").addAttribute("name", "variants_ss").setText(rootObj.toString());
+	       			
 	       			
 	       			// Features
 	       			if ((productFilterN1Features != null) && (!productFilterN1Features.equals(""))) 
@@ -1707,15 +1724,15 @@ public class GenerateSolrXMLImpl implements GenerateSolrXML {
 	       			}
 	       			
 	       			// Price
-	       			if ((productFilterN1Price != null) && (!productFilterN1Price.equals(""))) 
-	       			{
-	       				
-	       				solrDocElement.addElement("field").addAttribute("name", "price_db").setText(productFilterN1Price);
-	    	       		solrDocElement.addElement("field").addAttribute("name", "price_sdb").setText(productFilterN1Price);
-	       			}
+//	       			if ((productFilterN1Price != null) && (!productFilterN1Price.equals(""))) 
+//	       			{
+//	       				
+//	       				solrDocElement.addElement("field").addAttribute("name", "price_db").setText(productFilterN1Price);
+//	    	       		solrDocElement.addElement("field").addAttribute("name", "price_sdb").setText(productFilterN1Price);
+//	       			}
 	       			
 	       		}
-	       		// If Lens Product...
+	       		// If NIKKOR Lenses...
 	       		else if (productFilterType.equalsIgnoreCase("lens")) {
 	       			
 	       			// Usage Type
@@ -1788,15 +1805,69 @@ public class GenerateSolrXMLImpl implements GenerateSolrXML {
 	       			}
 	       			
 	       			// Price
-	       			if ((productFilterLPrice != null) && (!productFilterLPrice.equals(""))) 
-	       			{
+//	       			if ((productFilterLPrice != null) && (!productFilterLPrice.equals(""))) 
+//	       			{
+//	       				
+//	       				solrDocElement.addElement("field").addAttribute("name", "price_db").setText(productFilterLPrice);
+//	    	       		solrDocElement.addElement("field").addAttribute("name", "price_sdb").setText(productFilterLPrice);
+//	       			}
+	       			
+	       			// Colorways
+	       			List <Node> viewsNodes = null;
+	       			
+	       			ObjectMapper mapper = new ObjectMapper();
+   				  	ObjectNode rootObj = mapper.createObjectNode();
+   				  	
+   				  	// If Locale DCR Has Colors...Use It...
+	       			if (lRootElement.selectSingleNode("Colourways") != null && !lRootElement.selectSingleNode("Colourways/swatch_image").getText().equals("")) {
+	  				   
+	       				logger.info("Using Locale DCR Colours");
+	       				viewsNodes = lRootElement.selectNodes("Colourways");
+	       			
+	       			}
+	       			
+	       			if (viewsNodes != null) {
 	       				
-	       				solrDocElement.addElement("field").addAttribute("name", "price_db").setText(productFilterLPrice);
-	    	       		solrDocElement.addElement("field").addAttribute("name", "price_sdb").setText(productFilterLPrice);
+	       				int count = 0;
+	   				  	
+	   				  	for ( Node n : viewsNodes )
+	   				  	{
+	   				  		if (n.selectSingleNode("swatch_image") != null && !n.selectSingleNode("swatch_image").getText().equals("")
+	   						    && n.selectSingleNode("image") != null && !n.selectSingleNode("image").getText().equals("")) {
+	   				  			
+	   				  			ObjectNode idObject = rootObj.putObject(metaProductId + "_" + count);
+	   				  		
+	   				  			solrDocElement.addElement("field").addAttribute("name", "pnos_m_et").setText(metaProductId + "_" + count);
+	   				  		
+	   				  			ObjectNode colorObject = idObject.putObject("color");
+	   				  			
+	   				  			colorObject.put("parent_id", metaProductId + "_" + metaLocale);
+	   				  			colorObject.put("name", n.selectSingleNode("title").getText());
+	   				  			
+	   				  			if (n.selectSingleNode("title") != null && !n.selectSingleNode("title").getText().equals("")) {
+	   				  				logger.info("Adding Colour: " + n.selectSingleNode("title").getText());
+	   				  			} else {
+	   				  				logger.info("Adding Colour: " + n.selectSingleNode("swatch_image").getText());
+	   				  			}
+	   				  			
+	   				  			
+	   				  			solrDocElement.addElement("field").addAttribute("name", "color_m_s").setText(n.selectSingleNode("title").getText());
+	   				  			solrDocElement.addElement("field").addAttribute("name", "color_m_ss").setText(n.selectSingleNode("title").getText());
+		    	       		
+	   				  			colorObject.put("swatch", n.selectSingleNode("swatch_image").getText());
+	   				  			colorObject.put("image", n.selectSingleNode("image").getText());
+	   				  			
+	   				  			count++;
+	   				  		}
+	   				  	}
 	       			}
 	       		
+   				  	solrDocElement.addElement("field").addAttribute("name", "variants_s").setText(rootObj.toString());
+   				  	solrDocElement.addElement("field").addAttribute("name", "variants_ss").setText(rootObj.toString());
+	       			
+	       		
 	       		} 
-	       		// If Z-Mount Lens Product...
+	       		// If NIKKOR Z Lenses...
 	       		else if (productFilterType.equalsIgnoreCase("nz_lens")) {
 	       			
 	       			// S-Line
@@ -1877,16 +1948,70 @@ public class GenerateSolrXMLImpl implements GenerateSolrXML {
 	       			}
 	       			
 	       			// Price
-	       			if ((productFilterZMPrice != null) && (!productFilterZMPrice.equals(""))) 
-	       			{
-	       				
-	       				solrDocElement.addElement("field").addAttribute("name", "price_db").setText(productFilterZMPrice);
-	    	       		solrDocElement.addElement("field").addAttribute("name", "price_sdb").setText(productFilterZMPrice);
+//	       			if ((productFilterZMPrice != null) && (!productFilterZMPrice.equals(""))) 
+//	       			{
+//	       				
+//	       				solrDocElement.addElement("field").addAttribute("name", "price_db").setText(productFilterZMPrice);
+//	    	       		solrDocElement.addElement("field").addAttribute("name", "price_sdb").setText(productFilterZMPrice);
+//	       			}
+	       			
+	       			// Colorways
+	       			List <Node> viewsNodes = null;
+	       			
+	       			ObjectMapper mapper = new ObjectMapper();
+   				  	ObjectNode rootObj = mapper.createObjectNode();
+   				  	
+   				  	// If Locale DCR Has Colors...Use It...
+	       			if (lRootElement.selectSingleNode("Colourways") != null && !lRootElement.selectSingleNode("Colourways/swatch_image").getText().equals("")) {
+	  				   
+	       				logger.info("Using Locale DCR Colours");
+	       				viewsNodes = lRootElement.selectNodes("Colourways");
+	       			
 	       			}
+	       			
+	       			if (viewsNodes != null) {
+	       				
+	       				int count = 0;
+	   				  	
+	   				  	for ( Node n : viewsNodes )
+	   				  	{
+	   				  		if (n.selectSingleNode("swatch_image") != null && !n.selectSingleNode("swatch_image").getText().equals("")
+	   						    && n.selectSingleNode("image") != null && !n.selectSingleNode("image").getText().equals("")) {
+	   				  			
+	   				  			ObjectNode idObject = rootObj.putObject(metaProductId + "_" + count);
+	   				  		
+	   				  			solrDocElement.addElement("field").addAttribute("name", "pnos_m_et").setText(metaProductId + "_" + count);
+	   				  		
+	   				  			ObjectNode colorObject = idObject.putObject("color");
+	   				  			
+	   				  			colorObject.put("parent_id", metaProductId + "_" + metaLocale);
+	   				  			colorObject.put("name", n.selectSingleNode("title").getText());
+	   				  			
+	   				  			if (n.selectSingleNode("title") != null && !n.selectSingleNode("title").getText().equals("")) {
+	   				  				logger.info("Adding Colour: " + n.selectSingleNode("title").getText());
+	   				  			} else {
+	   				  				logger.info("Adding Colour: " + n.selectSingleNode("swatch_image").getText());
+	   				  			}
+	   				  			
+	   				  			
+	   				  			solrDocElement.addElement("field").addAttribute("name", "color_m_s").setText(n.selectSingleNode("title").getText());
+	   				  			solrDocElement.addElement("field").addAttribute("name", "color_m_ss").setText(n.selectSingleNode("title").getText());
+		    	       		
+	   				  			colorObject.put("swatch", n.selectSingleNode("swatch_image").getText());
+	   				  			colorObject.put("image", n.selectSingleNode("image").getText());
+	   				  			
+	   				  			count++;
+	   				  		}
+	   				  	}
+	       			}
+	       		
+   				  	solrDocElement.addElement("field").addAttribute("name", "variants_s").setText(rootObj.toString());
+   				  	solrDocElement.addElement("field").addAttribute("name", "variants_ss").setText(rootObj.toString());
+	       			
 	       			
 	       		}
 	       		
-	       		// If 1 Nikkor Lens Product...
+	       		// If 1 Nikkor Lenses...
 	       		else if (productFilterType.equalsIgnoreCase("n1_lens")) {
 	       			
 	       			// Lens Type
@@ -1946,32 +2071,26 @@ public class GenerateSolrXMLImpl implements GenerateSolrXML {
 	       			}
 	       			
 	       			// Price
-	       			if ((productFilterN1LPrice != null) && (!productFilterN1LPrice.equals(""))) 
-	       			{
-	       				
-	       				solrDocElement.addElement("field").addAttribute("name", "price_db").setText(productFilterN1LPrice);
-	    	       		solrDocElement.addElement("field").addAttribute("name", "price_sdb").setText(productFilterN1LPrice);
-	       			}
+//	       			if ((productFilterN1LPrice != null) && (!productFilterN1LPrice.equals(""))) 
+//	       			{
+//	       				
+//	       				solrDocElement.addElement("field").addAttribute("name", "price_db").setText(productFilterN1LPrice);
+//	    	       		solrDocElement.addElement("field").addAttribute("name", "price_sdb").setText(productFilterN1LPrice);
+//	       			}
 	       			
-	       			// Variants
+	       			// Colorways
 	       			List <Node> viewsNodes = null;
 	       			
 	       			ObjectMapper mapper = new ObjectMapper();
    				  	ObjectNode rootObj = mapper.createObjectNode();
    				  	
    				  	// If Locale DCR Has Colors...Use It...
-	       			if ((lRootElement.selectSingleNode("Colourways") != null) && (!lRootElement.selectSingleNode("Colourways/title").getText().equals(""))) {
+	       			if (lRootElement.selectSingleNode("Colourways") != null && !lRootElement.selectSingleNode("Colourways/swatch_image").getText().equals("")) {
 	  				   
 	       				logger.info("Using Locale DCR Colours");
 	       				viewsNodes = lRootElement.selectNodes("Colourways");
 	       			
 	       			}
-	       			// Else Use en_Asia DCR...
-	       			/*else {
-	       			
-	       				logger.info("Using en_Asia DCR Colours");
-	       				viewsNodes = mRootElement.selectNodes("Colourways");
-	       			}*/
 	       			
 	       			if (viewsNodes != null) {
 	       				
@@ -1979,8 +2098,7 @@ public class GenerateSolrXMLImpl implements GenerateSolrXML {
 	   				  	
 	   				  	for ( Node n : viewsNodes )
 	   				  	{
-	   				  		if (n.selectSingleNode("title") != null && !n.selectSingleNode("title").getText().equals("")
-	   						    && n.selectSingleNode("swatch_image") != null && !n.selectSingleNode("swatch_image").getText().equals("")
+	   				  		if (n.selectSingleNode("swatch_image") != null && !n.selectSingleNode("swatch_image").getText().equals("")
 	   						    && n.selectSingleNode("image") != null && !n.selectSingleNode("image").getText().equals("")) {
 	   				  			
 	   				  			ObjectNode idObject = rootObj.putObject(metaProductId + "_" + count);
@@ -1992,7 +2110,12 @@ public class GenerateSolrXMLImpl implements GenerateSolrXML {
 	   				  			colorObject.put("parent_id", metaProductId + "_" + metaLocale);
 	   				  			colorObject.put("name", n.selectSingleNode("title").getText());
 	   				  			
-	   				  			logger.info("Adding Colour: " + n.selectSingleNode("title").getText());
+	   				  			if (n.selectSingleNode("title") != null && !n.selectSingleNode("title").getText().equals("")) {
+	   				  				logger.info("Adding Colour: " + n.selectSingleNode("title").getText());
+	   				  			} else {
+	   				  				logger.info("Adding Colour: " + n.selectSingleNode("swatch_image").getText());
+	   				  			}
+	   				  			
 	   				  			
 	   				  			solrDocElement.addElement("field").addAttribute("name", "color_m_s").setText(n.selectSingleNode("title").getText());
 	   				  			solrDocElement.addElement("field").addAttribute("name", "color_m_ss").setText(n.selectSingleNode("title").getText());
@@ -2008,10 +2131,11 @@ public class GenerateSolrXMLImpl implements GenerateSolrXML {
    				  	solrDocElement.addElement("field").addAttribute("name", "variants_s").setText(rootObj.toString());
    				  	solrDocElement.addElement("field").addAttribute("name", "variants_ss").setText(rootObj.toString());
 	       			
+	       			
 	       		}
 	       		
 	       		else {
-	       			// Variants
+	       			// Colorways
 	       			List <Node> viewsNodes = null;
 	       			
 	       			ObjectMapper mapper = new ObjectMapper();
